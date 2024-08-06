@@ -1,0 +1,132 @@
+  
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('navbar.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+          });
+    });
+  </script>
+<script>
+document.addEventListener("DOMContentLoaded", async function() {
+      await fetchData();
+
+      // Handle form submission
+      document.getElementById('registration-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        const formData = new FormData(this);
+        const data = Object.fromEntries(formData.entries());
+
+        try {
+          const response = await fetch('/insert/gym_member', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          });
+
+          const result = await response.json();
+          if (result.success) {
+            location.reload();
+            alert(result.message);
+            await fetchData(); // Refresh data after successful registration
+          } else {
+            location.reload();
+            alert(result.message);
+          }
+        } catch (error) {
+          console.error('Error:', error);
+          alert('An error occurred while registering the member.');
+        }
+      });
+    });
+</script>
+
+<script>
+    var current_page = 1;
+    var records_per_page = 8;
+
+    async function fetchData() {
+      try {
+        const response = await fetch('/get/gym_member');
+        const result = await response.json();
+        
+        if (result.success) {
+          const rows = result.data.map(item => {
+            return `
+              <tr>
+                <td class="px-4 py-4 whitespace-nowrap">${item.ID || 'N/A'}</td>
+                <td class="px-5 py-4 whitespace-nowrap">${item.ID_CARD  || 'N/A'}</td>
+                <td class="px-5 py-4 whitespace-nowrap">${item.Expiry ? new Date(item.Expiry).toLocaleDateString() : 'N/A'}</td>
+                <td class="px-5 py-4 whitespace-nowrap">${item.Membership || 'N/A'}</td>
+                <td class="px-5 py-4 whitespace-nowrap">${item.First_Name || 'N/A'}</td>
+                <td class="px-5 py-4 whitespace-nowrap">${item.Last_Name || 'N/A'}</td>
+                <td class="px-5 py-4 whitespace-nowrap">${item.Phone_Number || 'N/A'}</td>
+              </tr>
+            `;
+          });
+
+          function changePage(page) {
+            const tbody = document.querySelector('#data-table tbody');
+            tbody.innerHTML = ''; // Clear existing rows
+
+            if (page < 1) page = 1;
+            if (page > numPages()) page = numPages();
+
+            const start = (page - 1) * records_per_page;
+            const end = start + records_per_page;
+
+            const paginatedData = rows.slice(start, end);
+            tbody.innerHTML = paginatedData.join('');
+
+            document.getElementById("page").innerHTML = page;
+
+            if (page == 1) {
+              document.getElementById("btn_prev").style.visibility = "hidden";
+            } else {
+              document.getElementById("btn_prev").style.visibility = "visible";
+            }
+
+            if (page == numPages()) {
+              document.getElementById("btn_next").style.visibility = "hidden";
+            } else {
+              document.getElementById("btn_next").style.visibility = "visible";
+            }
+          }
+
+          function prevPage() {
+            if (current_page > 1) {
+              current_page--;
+              changePage(current_page);
+            }
+          }
+
+          function nextPage() {
+            if (current_page < numPages()) {
+              current_page++;
+              changePage(current_page);
+            }
+          }
+
+          function numPages() {
+            return Math.ceil(rows.length / records_per_page);
+          }
+
+          document.getElementById("btn_prev").addEventListener('click', prevPage);
+          document.getElementById("btn_next").addEventListener('click', nextPage);
+
+          changePage(current_page);
+
+        } else {
+          throw new Error(result.message);
+        }
+      } catch (error) {
+        document.getElementById('error').textContent = `Error fetching data: ${error.message}`;
+      }
+    }
+
+    window.onload = fetchData;
+
+</script>

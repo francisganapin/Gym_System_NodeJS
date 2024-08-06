@@ -1,0 +1,24 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Member</title>
+
+    <script>
+    // navbar.js
+        document.addEventListener("DOMContentLoaded", function() {
+            fetch('navbar.html')
+              .then(response => response.text())
+              .then(data => {
+                document.getElementById('navbar').innerHTML = data;
+              });
+    });</script>
+
+</head>
+<body>
+  <div id="navbar"></div>
+  <h1>Welcome to the Login Member Page</h1>
+</body>
+</html>
