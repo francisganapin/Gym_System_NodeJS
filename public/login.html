@@ -78,33 +78,35 @@
 
 <!--update mbmer-->
 <script>
+  // Handle form submission
+  document.getElementById('login-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
 
-    // Handle form submission
-    document.getElementById('login-form').addEventListener('submit', async function(event) {
-          event.preventDefault();
-          const formData = new FormData(this);
-          const data = Object.fromEntries(formData.entries());
-    
-          try {
-            const response = await fetch('/login/gym_member', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(data),
-             
-            });
-    
-            if (result.success) {
-              alert(result.message,data);
-            
-            } else {
-              alert(result.message);
-            }
-          } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while registering the member.');
-          }
-        });
-    
-    </script>
+    try {
+      const response = await fetch('/login/gym_member', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        alert(result.message, data);
+        // You can update the UI or redirect the user as needed
+        document.getElementById('expiry-date').textContent = `Expiry Date: ${result.expiry}`;
+      } else {
+        alert(result.message);
+        document.getElementById('expiry-date').textContent = 'Failed to log in the member';
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while logging in the member.');
+    }
+  });
+  
+</script>
