@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Trainers</title>
+
+</head>
+
+<div id="navbar"></div>
+<body>
+    <div class="container">
+        <div class="trainer-list">
+            <div class="trainer">
+                <img src="trainer1.jpg" alt="Trainer 1">
+                <h2>Trainer 1</h2>
+                <p>Specialty: Strength Training</p>
+                <p>Experience: 5 years</p>
+            </div>
+            <div class="trainer">
+                <img src="trainer2.jpg" alt="Trainer 2">
+                <h2>Trainer 2</h2>
+                <p>Specialty: Cardio</p>
+                <p>Experience: 3 years</p>
+            </div>
+            <div class="trainer">
+                <img src="trainer3.jpg" alt="Trainer 3">
+                <h2>Trainer 3</h2>
+                <p>Specialty: Yoga</p>
+                <p>Experience: 7 years</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('navbar.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+          });
+    });
+  </script>

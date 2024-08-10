@@ -159,7 +159,10 @@ const server = createServer(async (req, res) => {
     filePath = join(process.cwd(), 'public/add_member.html');
   } else if (req.url === '/debug') {
     filePath = join(process.cwd(), 'public/debug.html');
-  } else if (req.url === '/navbar') {
+  } else if (req.url === '/trainor') {
+    filePath = join(process.cwd(), 'public/trainor.html');
+  }
+   else if (req.url === '/navbar') {
       filePath = join(process.cwd(), 'navbar.html');
   } else if(req.url ==='/login'){
       filePath = join(process.cwd(),'public/login.html')

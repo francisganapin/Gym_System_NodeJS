@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Trainers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        header {
+            background: #333;
+            color: #fff;
+            padding-top: 30px;
+            min-height: 70px;
+            border-bottom: #77aaff 3px solid;
+        }
+        header h1 {
+            text-align: center;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        .trainer-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .trainer {
+            background: #fff;
+            margin: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 30%;
+            box-sizing: border-box;
+        }
+        .trainer img {
+            max-width: 100%;
+            height: auto;
+        }
+        .trainer h2 {
+            margin: 0 0 10px;
+        }
+        .trainer p {
+            margin: 0 0 10px;
+        }
+    </style>
+</head>
+
+<div id="navbar"></div>
+<body>
+    <div class="container">
+        <div class="trainer-list">
+            <div class="trainer">
+                <img src="trainer1.jpg" alt="Trainer 1">
+                <h2>Trainer 1</h2>
+                <p>Specialty: Strength Training</p>
+                <p>Experience: 5 years</p>
+            </div>
+            <div class="trainer">
+                <img src="trainer2.jpg" alt="Trainer 2">
+                <h2>Trainer 2</h2>
+                <p>Specialty: Cardio</p>
+                <p>Experience: 3 years</p>
+            </div>
+            <div class="trainer">
+                <img src="trainer3.jpg" alt="Trainer 3">
+                <h2>Trainer 3</h2>
+                <p>Specialty: Yoga</p>
+                <p>Experience: 7 years</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('navbar.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+          });
+    });
+  </script>
