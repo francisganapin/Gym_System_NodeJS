@@ -190,6 +190,8 @@ const server = createServer(async (req, res) => {
     filePath = join(process.cwd(), 'public/debug.html');
   } else if (req.url === '/trainor') {
     filePath = join(process.cwd(), 'public/trainor.html');
+  } else if (req.url === '/inventory') {
+    filePath = join(process.cwd(), 'public/inventory.html');
   }
    else if (req.url === '/navbar') {
       filePath = join(process.cwd(), 'navbar.html');
