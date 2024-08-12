@@ -16,6 +16,35 @@ const mimeTypes = {
 };
 
 const server = createServer(async (req, res) => {
+
+
+  // Show all available data in your database
+  if (req.url === '/select/trainor') {
+    try {
+      const connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'memberdb',
+      });
+
+      const [rows] = await connection.query('SELECT * FROM gym_trainor');
+      await connection.end();
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, data: rows }));
+    } catch (error) {
+      console.error('Error connecting to the database:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, message: 'Error connecting to the database' }));
+    }
+    return;
+  }
+
+
+
+
+
  
   // Show all available data in your database
   if (req.url === '/post/customers') {

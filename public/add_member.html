@@ -308,7 +308,7 @@
       if (result.success) {
         const rows = result.data.map(item => {
           return `
-            <tr>
+           <tr>
               <td class="px-4 py-4 whitespace-nowrap">${item.ID || 'N/A'}</td>
               <td class="px-5 py-4 whitespace-nowrap">${item.ID_CARD  || 'N/A'}</td>
               <td class="px-5 py-4 whitespace-nowrap">${item.Expiry ? new Date(item.Expiry).toLocaleDateString() : 'N/A'}</td>
@@ -387,7 +387,7 @@
 <script>
 
 // Handle form submission
-document.getElementById('update-form').addEventListener('submit', async function(event) {
+      document.getElementById('update-form').addEventListener('submit', async function(event) {
       event.preventDefault();
       const formData = new FormData(this);
       const data = Object.fromEntries(formData.entries());

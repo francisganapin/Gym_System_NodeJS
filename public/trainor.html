@@ -7,9 +7,10 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            background: #4070f4;
+            min-height: 100vh;
         }
         .container {
             width: 80%;
@@ -58,29 +59,52 @@
 <div id="navbar"></div>
 <body>
     <div class="container">
-        <div class="trainer-list">
-            <div class="trainer">
-                <img src="trainer1.jpg" alt="Trainer 1">
-                <h2>Trainer 1</h2>
-                <p>Specialty: Strength Training</p>
-                <p>Experience: 5 years</p>
-            </div>
-            <div class="trainer">
-                <img src="trainer2.jpg" alt="Trainer 2">
-                <h2>Trainer 2</h2>
-                <p>Specialty: Cardio</p>
-                <p>Experience: 3 years</p>
-            </div>
-            <div class="trainer">
-                <img src="trainer3.jpg" alt="Trainer 3">
-                <h2>Trainer 3</h2>
-                <p>Specialty: Yoga</p>
-                <p>Experience: 7 years</p>
-            </div>
+        <div class="trainer-list" id="trainor_list">
+            <!-- Trainer information will be dynamically inserted here -->
         </div>
     </div>
 </body>
-</html>
+
+<script>
+    async function trainorData() {
+        try {
+            const response = await fetch('/select/trainor', {
+                method: 'GET',  // Change to 'GET'
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+    
+            const result = await response.json();
+            if (result.success) {
+                const trainers = result.data.map(item => {
+                    return `
+                        <div class="trainer">
+                            <h1>First Name: ${item.first_name || 'N/A'}</h1>
+                            <h1>Last Name: ${item.last_name || 'N/A'}</h1>
+                            <h1>Specialty: ${item.specialty || 'N/A'}</h1>
+                            <h1>Phone: ${item.phone_number || 'N/A'}</h1>
+                        </div>
+                    `;
+                }).join('');
+    
+                // Insert the trainer information into the trainer-list div
+                document.getElementById('trainor_list').innerHTML = trainers;
+            } else {
+                alert(result.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while fetching the trainer data.');
+        }
+    }
+    
+    // Example usage:
+    trainorData();
+    </script>
+    
+
+
 
 <script>
     document.addEventListener("DOMContentLoaded", function() {
