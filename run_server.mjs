@@ -43,28 +43,6 @@ const server = createServer(async (req, res) => {
 
 
 
-  if (req.url === '/post/item') {
-    try {
-      const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'root',
-        database: 'memberdb',
-      });
-
-      const [rows] = await connection.query('SELECT * FROM gym_item');
-      await connection.end();
-
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ success: true, data: rows }));
-    } catch (error) {
-      console.error('Error connecting to the database:', error);
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ success: false, message: 'Error connecting to the database' }));
-    }
-    return;
-  }
-
  
   // Show all available data in your gym member
   if (req.url === '/post/customers') {
@@ -203,7 +181,7 @@ const server = createServer(async (req, res) => {
 
 
     // show login 
-    if (req.url === "/update/item" && req.method === 'POST') {
+    if (req.url === "login/gym_member" && req.method === 'POST') {
       let body = '';
       req.on('data', chunk => {
         body += chunk.toString();
@@ -245,6 +223,65 @@ const server = createServer(async (req, res) => {
   
 
 
+
+/// show  item on gym
+  if (req.url === '/post/item') {
+    try {
+      const connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'memberdb',
+      });
+
+      const [rows] = await connection.query('SELECT * FROM gym_item');
+      await connection.end();
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, data: rows }));
+    } catch (error) {
+      console.error('Error connecting to the database:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, message: 'Error connecting to the database' }));
+    }
+    return;
+  }
+
+
+  // update member
+  if (req.url === "/update/item" && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+
+    req.on('end', async () => {
+      const { item_name, stock } = JSON.parse(body);
+
+      try {
+        const connection = await mysql.createConnection({
+          host: 'localhost',
+          user: 'root',
+          password: 'root',
+          database: 'memberdb',
+        });
+
+        const sql = 'UPDATE gym_item SET stock = ? WHERE item_name = ?';
+        const values = [stock, item_name];
+  
+        await connection.query(sql, values);
+        await connection.end();
+  
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, message: 'item stock updated successfully.' }));
+      } catch (error) {
+        console.error('Error updating data:', error);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, message: 'An error occurred while updating the item.' }));
+      }
+    });
+    return;
+  }
 
   let filePath;
   if (req.url === '/' || req.url === '/homepage' || req.url === '/homepage.html') {
