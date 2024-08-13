@@ -43,10 +43,30 @@ const server = createServer(async (req, res) => {
 
 
 
+  if (req.url === '/post/item') {
+    try {
+      const connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'memberdb',
+      });
 
+      const [rows] = await connection.query('SELECT * FROM gym_item');
+      await connection.end();
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, data: rows }));
+    } catch (error) {
+      console.error('Error connecting to the database:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, message: 'Error connecting to the database' }));
+    }
+    return;
+  }
 
  
-  // Show all available data in your database
+  // Show all available data in your gym member
   if (req.url === '/post/customers') {
     try {
       const connection = await mysql.createConnection({
@@ -180,6 +200,51 @@ const server = createServer(async (req, res) => {
     });
     return;
   }
+
+
+    // show login 
+    if (req.url === "/update/item" && req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => {
+        body += chunk.toString();
+      });
+  
+      req.on('end', async () => {
+        const { id } = JSON.parse(body);
+  
+        try {
+          const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: 'root',
+            database: 'memberdb',
+          });
+  
+          const sql = 'SELECT Expiry FROM gym_members WHERE TRIM(ID_CARD) = ?'
+          const [rows] = await connection.query(sql, [id]);
+  
+          await connection.end();
+  
+          console.log('Fetched rows:', rows);
+          if (rows.length > 0) {
+            const expiry = rows[0].Expiry;
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: true, message: 'Member fetched successfully.', expiry: expiry }));
+          } else {
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: false, message: 'Member not found.' }));
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, message: 'An error occurred while fetching the member.' }));
+        }
+      });
+      return;
+    }
+  
+
+
 
   let filePath;
   if (req.url === '/' || req.url === '/homepage' || req.url === '/homepage.html') {

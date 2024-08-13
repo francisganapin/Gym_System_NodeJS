@@ -135,10 +135,11 @@
     <table id="data-table">
         <thead>
             <tr>
-                <th>ID</th>
-                <th>ID Card</th>
-                <th>Expiry</th>
-                <th>Expiry</th>
+                <th>Item</th>
+                <th>Stock</th>
+                <th>Description</th>
+                <th>supplier</th>
+                <th>phone number</th>
             </tr>
         </thead>
         <tbody id="data-body">
@@ -153,23 +154,46 @@
     </div>
 </div>
 
+
 <!-- Forms Row -->
 <div class="forms-row">
 
     <!-- Update Form -->
     <div class="form-container">
-        <h2>Update Form</h2>
+        <h2>Input Item</h2>
         <form id="update-form">
             <div class="form-group">
-                <input type="text" name="id" placeholder="Enter ID" required>
+                <input type="text" name="id" placeholder="Enter Name of Item" required>
                 <div class="icon">
                     <i class="fas fa-id-badge"></i>
                 </div>
             </div>
             <div class="form-group">
-                <input type="date" name="expiry" id="expiry" value="2024-01-01" min="2024-01-01" max="2030-12-31" required>
+                <input type="text" name="id" placeholder="Input Quantity" required>
                 <div class="icon">
-                    <i class="fas fa-calendar-alt"></i>
+                    <i class="fas fa-id-badge"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Input" class="btn">
+            </div>
+        </form>
+    </div>
+
+   <!-- Update Form -->
+    <div class="form-container">
+        <h2>Update Item</h2>
+        <form id="update-form">
+            <div class="form-group">
+                <input type="text" name="id" placeholder="Enter Name of Item" required>
+                <div class="icon">
+                    <i class="fas fa-id-badge"></i>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" name="id" placeholder="Input Quantity" required>
+                <div class="icon">
+                    <i class="fas fa-id-badge"></i>
                 </div>
             </div>
             <div class="form-group">
@@ -178,46 +202,18 @@
         </form>
     </div>
 
-        <!-- Update Form -->
-        <div class="form-container">
-            <h2>Update Form</h2>
-            <form id="update-form">
-                <div class="form-group">
-                    <input type="text" name="id" placeholder="Enter ID" required>
-                    <div class="icon">
-                        <i class="fas fa-id-badge"></i>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <input type="date" name="expiry" id="expiry" value="2024-01-01" min="2024-01-01" max="2030-12-31" required>
-                    <div class="icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <input type="submit" value="Update" class="btn">
-                </div>
-            </form>
-        </div>
-
     <!-- Update Form -->
     <div class="form-container">
-        <h2>Update Form</h2>
+        <h2>Delete Item</h2>
         <form id="update-form">
             <div class="form-group">
-                <input type="text" name="id" placeholder="Enter ID" required>
+                <input type="text" name="id" placeholder="Enter Name of Item" required>
                 <div class="icon">
                     <i class="fas fa-id-badge"></i>
                 </div>
             </div>
             <div class="form-group">
-                <input type="date" name="expiry" id="expiry" value="2024-01-01" min="2024-01-01" max="2030-12-31" required>
-                <div class="icon">
-                    <i class="fas fa-calendar-alt"></i>
-                </div>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Update" class="btn">
+                <input type="submit" value="Delete" class="btn">
             </div>
         </form>
     </div>
@@ -300,18 +296,18 @@
 
   async function fetchData() {
     try {
-      const response = await fetch('/post/customers');
+      const response = await fetch('/post/item');
       const result = await response.json();
       
       if (result.success) {
         const rows = result.data.map(item => {
           return `
            <tr>
-              <td class="px-4 py-4 whitespace-nowrap">${item.ID || 'N/A'}</td>
-              <td class="px-5 py-4 whitespace-nowrap">${item.ID_CARD  || 'N/A'}</td>
-              <td class="px-5 py-4 whitespace-nowrap">${item.Expiry ? new Date(item.Expiry).toLocaleDateString() : 'N/A'}</td>
-              <td class="px-5 py-4 whitespace-nowrap">${item.Membership || 'N/A'}</td>
-
+              <td class="px-4 py-4 whitespace-nowrap">${item.item_name || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.stock  || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.description || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.supplier || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.phone_number|| 'N/A'}</td>
             </tr>
           `;
         });
@@ -385,3 +381,30 @@
 
 <!-- filter name of member-->
 <!-- Filter name of member -->
+
+<script>
+  function myFunction() {
+    // Declare variables
+    var input, filter, table, rows, i, txtValue;
+    input = document.getElementById('myInput');
+    filter = input.value.toUpperCase();
+    table = document.getElementById("data-table");
+    rows = table.getElementsByTagName('tr');
+
+    // Loop through all table rows, and hide those who don't match the search query
+    for (i = 1; i < rows.length; i++) { // Start at 1 to skip the header row
+      let firstItem = rows[i].getElementsByTagName("td")[0]; // First Name is in the 5th column
+      
+      if (firstItem) {
+        let itemNameValue = firstItem.textContent || firstItem.innerText;
+        txtValue = itemNameValue.toUpperCase(); // Combine first and last names
+
+        if (txtValue.indexOf(filter) > -1) {
+          rows[i].style.display = "";
+        } else {
+          rows[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
