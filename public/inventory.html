@@ -9,221 +9,270 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
   
-  <style>
-    .container {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        padding: 16px;
-        max-width: 1200px;
-        margin: auto;
-    }
 
-    .table-container {
-        background-color: white;
-        padding: 24px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-    }
 
-    .forms-row {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 20px;
-    }
+<style>
+  .container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+      max-width: 1200px;
+      margin: auto;
+  }
 
-    .form-container {
-        flex: 1;
-        background-color: white;
-        padding: 24px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        max-width: 100%;
-    }
+  .table-container {
+      background-color: white;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+  }
 
-    h2 {
-        font-size: 24px;
-        font-weight: bold;
-        margin-bottom: 16px;
-    }
+  .forms-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+  }
 
-    .form-group {
-        position: relative;
-        margin-bottom: 16px;
-    }
 
-    .form-group input,
-    .form-group select {
-        width: 100%;
-        padding: 12px 12px 12px 40px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-    }
 
-    .icon {
-        position: absolute;
-        left: 12px;
-        top: 50%;
-        transform: translateY(-50%);
-    }
+  h2 {
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 16px;
+  }
 
-    .btn {
-        background-color: red;
-        color: white;
-        padding: 12px;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        text-align: center;
-        width: 100%;
-    }
+  .form-group {
+      position: relative;
+      margin-bottom: 16px;
+  }
 
-    .btn:hover {
-        background-color: #3050d6;
-    }
+  .form-group input,
+  .form-group select {
+      width: 100%;
+      padding: 12px 12px 12px 40px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+  }
 
-    .table-container table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-bottom: 16px;
-    }
+  .icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+  }
 
-    .table-container th,
-    .table-container td {
-        padding: 12px;
-        border-bottom: 1px solid #ccc;
-        text-align: left;
-    }
+  .btn {
+      background-color: red;
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      width: 100%;
+  }
 
-    .pagination {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
+  .btn:hover {
+      background-color: #3050d6;
+  }
 
-    .pagination .btn {
-        width: auto;
-        padding: 8px 16px;
-    }
+  .table-container table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 16px;
+  }
 
-    #myInput {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 10px;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        box-sizing: border-box;
-    }
+  .table-container th,
+  .table-container td {
+      padding: 12px;
+      border-bottom: 1px solid #ccc;
+      text-align: left;
+  }
+
+  .pagination {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+  }
+
+  .pagination .btn {
+      width: auto;
+      padding: 8px 16px;
+  }
+
+  #myInput {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-sizing: border-box;
+  }
+
+  .insert_item_container {
+  background-color: white;
+  flex-grow: 1; /* Allows flex items to grow proportionally */
+  flex-shrink: 1; /* Allows flex items to shrink if necessary */
+  flex-basis: auto;
+  width: 420px;
+  height:500px;
+  border: 15px solid white;
+  padding: 50px;
+  margin: 20px;
+}
+
+
+
+
+
+  .update_item_container {
+  background-color: white;
+  flex-grow: 1; /* Allows flex items to grow proportionally */
+  flex-shrink: 1; /* Allows flex items to shrink if necessary */
+  flex-basis: auto;
+  width: 420px;
+  height:300px;
+  border: 15px solid white;
+  padding: 50px;
+  margin: 20px;
+}
+
+
+.delete_item_container {
+  background-color: white;
+  flex-grow: 1; /* Allows flex items to grow proportionally */
+  flex-shrink: 1; /* Allows flex items to shrink if necessary */
+  flex-basis: auto;
+  width: 420px;
+  height:300px;
+  border: 15px solid white;
+  padding: 50px;
+  margin: 20px;
+}
+
+
 </style>
+</head>
 
-  <div id="navbar"></div>
+<div id="navbar"></div>
 
-  <h1 div class="pl-20 ml-20 text-5xl pt-8 text-white">Welcome to the Add Member Page</h1>
-  
+<h1 div class="pl-20 ml-20 text-5xl pt-8 text-white">Welcome to the Add Member Page</h1>
+
 <body class="body-background"></body>
 
-</head>
+
 <body>
 
 <main class="container">
 <!-- Members List -->
 <div class="table-container">
-    <h2>Members List</h2>
-    <!-- Search input outside of table -->
-    <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names...">
-    <table id="data-table">
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Stock</th>
-                <th>Description</th>
-                <th>supplier</th>
-                <th>phone number</th>
-            </tr>
-        </thead>
-        <tbody id="data-body">
-            <!-- Data will be populated here -->
-        </tbody>
-    </table>
-    <!-- Pagination controls -->
-    <div class="pagination">
-        <button id="btn_prev" class="btn">Prev</button>
-        <span>Page: <span id="page"></span></span>
-        <button id="btn_next" class="btn">Next</button>
-    </div>
+  <h2>Members List</h2>
+  <!-- Search input outside of table -->
+  <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names...">
+  <table id="data-table">
+      <thead>
+          <tr>
+              <th>Item</th>
+              <th>Stock</th>
+              <th>Description</th>
+              <th>Supplier</th>
+              <th>Phone Number</th>
+          </tr>
+      </thead>
+      <tbody id="data-body">
+          <!-- Data will be populated here -->
+      </tbody>
+  </table>
+  <!-- Pagination controls -->
+  <div class="pagination">
+      <button id="btn_prev" class="btn">Prev</button>
+      <span>Page: <span id="page"></span></span>
+      <button id="btn_next" class="btn">Next</button>
+  </div>
 </div>
-
 
 <!-- Forms Row -->
 <div class="forms-row">
+  <!-- Input Form -->
+  <div class="insert_item_container">
+      <h2>Input Item</h2>
+      <form id="insert-form">
+          <div class="form-group">
+              <input type="text" name="item_name" placeholder="Enter Name of Item" required>
+              <div class="icon">
+                  <i class="fas fa-box"></i>
+              </div>
+          </div>
+          <div class="form-group">
+              <input type="text" name="quantity" placeholder="Input Quantity" required>
+              <div class="icon">
+                  <i class="fas fa-sort-amount-up"></i>
+              </div>
+          </div>
+          <div class="form-group">
+              <input type="text" name="description" placeholder="Enter Description" required>
+              <div class="icon">
+                  <i class="fas fa-info-circle"></i>
+              </div>
+          </div>
+          <div class="form-group">
+              <input type="text" name="supplier" placeholder="Enter Supplier Name" required>
+              <div class="icon">
+                  <i class="fas fa-truck"></i>
+              </div>
+          </div>
+          <div class="form-group">
+              <input type="text" name="phone_number" placeholder="Enter Phone Number" required>
+              <div class="icon">
+                  <i class="fas fa-phone"></i>
+              </div>
+          </div>
+          <div class="form-group">
+              <input type="submit" value="Input" class="btn">
+          </div>
+      </form>
+  </div>
 
-    <!-- Update Form -->
-    <div class="form-container">
-        <h2>Input Item</h2>
-        <form id="insert-form">
-            <div class="form-group">
-                <input type="text" name="id" placeholder="Enter Name of Item" required>
-                <div class="icon">
-                    <i class="fas fa-id-badge"></i>
-                </div>
-            </div>
-            <div class="form-group">
-                <input type="text" name="id" placeholder="Input Quantity" required>
-                <div class="icon">
-                    <i class="fas fa-id-badge"></i>
-                </div>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Input" class="btn">
-            </div>
-        </form>
-    </div>
+  <!-- Update Form -->
+  <div class="update_item_container">
+      <h2>Update Item</h2>
+      <form id="update-form-item">
+          <div class="form-group">
+              <input type="text" name="item_name" placeholder="Enter Name of Item" required>
+              <div class="icon">
+                  <i class="fas fa-box"></i>
+              </div>
+          </div>
+          <div class="form-group">
+              <input type="text" name="stock" placeholder="Input Quantity" required>
+              <div class="icon">
+                  <i class="fas fa-sort-amount-up"></i>
+              </div>
+          </div>
+          <div class="form-group">
+              <input type="submit" value="Update" class="btn">
+          </div>
+      </form>
+  </div>
 
-   <!-- Update Form -->
-    <div class="form-container">
-        <h2>Update Item</h2>
-        <form id="update-form-item">
-            <div class="form-group">
-                <input type="text" name="item_name" placeholder="Enter Name of Item" required>
-                <div class="icon">
-                    <i class="fas fa-id-badge"></i>
-                </div>
-            </div>
-            <div class="form-group">
-                <input type="text" name="stock" placeholder="Input Quantity" required>
-                <div class="icon">
-                    <i class="fas fa-id-badge"></i>
-                </div>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Update" class="btn">
-            </div>
-        </form>
-    </div>
-
-    <!-- Update Form -->
-    <div class="form-container">
-        <h2>Delete Item</h2>
-        <form id="delete-form-item">
-            <div class="form-group">
-                <input type="text" name="item_name" placeholder="Enter Name of Item" required>
-                <div class="icon">
-                    <i class="fas fa-id-badge"></i>
-                </div>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Delete" class="btn">
-            </div>
-        </form>
-    </div>
-
-
+  <!-- Delete Form -->
+  <div class="delete_item_container">
+      <h2>Delete Item</h2>
+      <form id="delete-form-item">
+          <div class="form-group">
+              <input type="text" name="item_name" placeholder="Enter Name of Item" required>
+              <div class="icon">
+                  <i class="fas fa-box"></i>
+              </div>
+          </div>
+          <div class="form-group">
+              <input type="submit" value="Delete" class="btn">
+          </div>
+      </form>
+  </div>
 </div>
-
-
-
-
 </main>
 
 </body>
