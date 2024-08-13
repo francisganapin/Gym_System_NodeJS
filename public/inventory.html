@@ -158,7 +158,7 @@
 
 <div id="navbar"></div>
 
-<h1 div class="pl-20 ml-20 text-5xl pt-8 text-white">Welcome to the Add Member Page</h1>
+<h1 div class="pl-20 ml-20 text-5xl pt-8 text-white">Welcome to the Inventory Page</h1>
 
 <body class="body-background"></body>
 
@@ -198,7 +198,7 @@
   <!-- Input Form -->
   <div class="insert_item_container">
       <h2>Input Item</h2>
-      <form id="insert-form">
+      <form id="insert-form-item">
           <div class="form-group">
               <input type="text" name="item_name" placeholder="Enter Name of Item" required>
               <div class="icon">
@@ -206,7 +206,7 @@
               </div>
           </div>
           <div class="form-group">
-              <input type="text" name="quantity" placeholder="Input Quantity" required>
+              <input type="text" name="stock" placeholder="Input Quantity" required>
               <div class="icon">
                   <i class="fas fa-sort-amount-up"></i>
               </div>
@@ -426,6 +426,42 @@
     }
   }
 </script>
+
+
+<!--insert item-->
+<script>
+  
+  // Handle form submission
+  document.getElementById('insert-form-item').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
+
+    try {
+      const response = await fetch('/insert/item', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (result.success) {
+        alert(result.message);
+        await fetchData(); // Refresh data after successful registration
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while inserting item.');
+    }
+  });
+</script>
+
+
+
 
 
 <!--update item-->
