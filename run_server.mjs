@@ -180,7 +180,7 @@ const server = createServer(async (req, res) => {
   }
 
 
-    // show login 
+    // show login  member data
     if (req.url === "login/gym_member" && req.method === 'POST') {
       let body = '';
       req.on('data', chunk => {
@@ -248,7 +248,7 @@ const server = createServer(async (req, res) => {
   }
 
 
-  // update member
+  // update item stock
   if (req.url === "/update/item" && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => {
@@ -283,6 +283,39 @@ const server = createServer(async (req, res) => {
     return;
   }
 
+  if (req.url === "/delete/item" && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
+
+    req.on('end', async () => {
+      const { item_name} = JSON.parse(body);
+
+      try {
+        const connection = await mysql.createConnection({
+          host: 'localhost',
+          user: 'root',
+          password: 'root',
+          database: 'memberdb',
+        });
+
+        const sql = 'DELETE FROM  gym_item  WHERE item_name = ?';
+        const values = [item_name];
+  
+        await connection.query(sql, values);
+        await connection.end();
+  
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, message: 'item was delete  successfully.' }));
+      } catch (error) {
+        console.error('Error updating data:', error);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, message: 'An error occurred while deleting the item.' }));
+      }
+    });
+    return;
+  }
   let filePath;
   if (req.url === '/' || req.url === '/homepage' || req.url === '/homepage.html') {
     filePath = join(process.cwd(), 'public/homepage.html');
