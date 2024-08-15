@@ -85,7 +85,7 @@
     const data = Object.fromEntries(formData.entries());
 
     try {
-      const response = await fetch('/insert/item', {
+      const response = await fetch('login/gym_member', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

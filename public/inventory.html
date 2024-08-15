@@ -195,6 +195,7 @@
 
 <!-- Forms Row -->
 <div class="forms-row">
+
   <!-- Input Form -->
   <div class="insert_item_container">
       <h2>Input Item</h2>
@@ -206,7 +207,7 @@
               </div>
           </div>
           <div class="form-group">
-              <input type="text" name="stock" placeholder="Input Quantity" required>
+              <input type="text"  class="onlyNumber" name="stock" placeholder="Input Quantity" required>
               <div class="icon">
                   <i class="fas fa-sort-amount-up"></i>
               </div>
@@ -224,7 +225,7 @@
               </div>
           </div>
           <div class="form-group">
-              <input type="text" name="phone_number" placeholder="Enter Phone Number" required>
+              <input type="text"  class="onlyNumber" name="phone_number" placeholder="Enter Phone Number" required>
               <div class="icon">
                   <i class="fas fa-phone"></i>
               </div>
@@ -246,7 +247,7 @@
               </div>
           </div>
           <div class="form-group">
-              <input type="text" name="stock" placeholder="Input Quantity" required>
+              <input type="text" class="onlyNumber" name="stock" placeholder="Input Quantity" required>
               <div class="icon">
                   <i class="fas fa-sort-amount-up"></i>
               </div>
@@ -272,6 +273,7 @@
           </div>
       </form>
   </div>
+
 </div>
 </main>
 
@@ -486,8 +488,10 @@
           if (result.success) {
             alert(result.message);
             await fetchData(); // Refresh data after successful registration
+            location.reload();
           } else {
             alert(result.message);
+            
           }
         } catch (error) {
           console.error('Error:', error);
@@ -528,3 +532,16 @@
       });
   
   </script>
+
+
+<!--script for only accept number-->
+<script>
+  /// use query selector so it can use multiple times then use class
+  document.querySelectorAll('.onlyNumber').forEach(function (element) {
+    element.addEventListener('input',function(e){
+      this.value = this.value.replace(/\D/g, '');
+    });
+    // Replace any non-digit characters with an empty string
+});
+
+</script>

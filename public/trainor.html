@@ -117,6 +117,7 @@
             outline: none;
         }
     </style>
+
     <!DOCTYPE html>
     <html lang="en">
     <head>
@@ -143,25 +144,31 @@
                     <h2>Registration Form for Trainer</h2>
                     <form id="registration-form">
                         <div class="form-group">
-                            <input type="text" name="id" placeholder="Employee ID" required>
+                            <input type="text" name="trainor_id" placeholder="Employee ID" required>
                             <div class="icon">
                                 <i class="fas fa-id-badge"></i>
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="firstName" placeholder="First Name" required>
+                            <input type="text" name="first_name" placeholder="First Name" required>
                             <div class="icon">
                                 <i class="fas fa-user"></i>
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="lastName" placeholder="Last Name" required>
+                            <input type="text" name="last_name" placeholder="Last Name" required>
                             <div class="icon">
                                 <i class="fas fa-user"></i>
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="text" name="phoneNumber" placeholder="Phone Number" required>
+                            <input type="text" name="specialty" placeholder="Specialty Number" required>
+                            <div class="icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class='onlyNumber' name="phone_number" placeholder="Phone Number" required>
                             <div class="icon">
                                 <i class="fas fa-phone"></i>
                             </div>
@@ -172,35 +179,18 @@
                     </form>
                 </div>
     
+
                 <div class="form-container">
-                    <h2>Update Trainer Data</h2>
-                    <form id="update-form">
+                    <h2>Delete Trainer Data</h2>
+                    <form id="delete-trainor-form">
                         <div class="form-group">
-                            <input type="text" name="id" placeholder="Employee ID" required>
+                            <input type="text" name="trainor_id" placeholder="Employee ID" required>
                             <div class="icon">
                                 <i class="fas fa-id-badge"></i>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <input type="text" name="firstName" placeholder="First Name" required>
-                            <div class="icon">
-                                <i class="fas fa-user"></i>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="lastName" placeholder="Last Name" required>
-                            <div class="icon">
-                                <i class="fas fa-user"></i>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" name="phoneNumber" placeholder="Phone Number" required>
-                            <div class="icon">
-                                <i class="fas fa-phone"></i>
-                            </div>
-                        </div>
                         <div>
-                            <input type="submit" value="Update" class="btn">
+                            <input type="submit" value="Delete" class="btn">
                         </div>
                     </form>
                 </div>
@@ -222,7 +212,7 @@
 
         
 
-
+<!-- fetch list of trainor-->
 <script>
     async function trainorData() {
         try {
@@ -238,6 +228,7 @@
                 const trainers = result.data.map(item => {
                     return `
                         <div class="trainer">
+                            <h1>Trainor Id: ${item.trainor_id || 'N/A'}</h1>
                             <h1>First Name: ${item.first_name || 'N/A'}</h1>
                             <h1>Last Name: ${item.last_name || 'N/A'}</h1>
                             <h1>Specialty: ${item.specialty || 'N/A'}</h1>
@@ -263,7 +254,7 @@
     
 
 
-
+<!-- show nav bar-->
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         fetch('navbar.html')
@@ -272,4 +263,90 @@
             document.getElementById('navbar').innerHTML = data;
           });
     });
+  </script>
+
+<!--insert trainor-->
+<script>
+  
+    // Handle form submission
+    document.getElementById('registration-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+  
+      try {
+        const response = await fetch('/insert/trainor', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+  
+        const result = await response.json();
+        if (result.success) {
+          alert(result.message);
+          await fetchData(); // Refresh data after successful registration
+          alert('Sucessful inserted trainor')
+        } else {
+          alert(result.message);
+          alert('Sucessful inserted trainor')
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while inserting item.');
+      }
+    });
+  </script>
+
+
+<!-- delete trainor-->
+  <script>
+      
+    // Handle form submission
+     document.getElementById('delete-trainor-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+  
+      try {
+        const response = await fetch('/delete/trainor', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data),
+        });
+  
+        const result = await response.json();
+        if (result.success) {
+          alert(result.message);
+          await fetchData(); // Refresh data after successful registration
+
+          alert('Sucessful deleted trainor')
+        } else {
+          alert(result.message);
+          await fetchData(); // Refresh data after successful registration
+        
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while inserting item.');
+        await fetchData(); // Refresh data after successful registration
+      }
+    });
+  </script>
+
+
+
+<!--script for only accept number-->
+<script>
+    /// use query selector so it can use multiple times then use class
+    document.querySelectorAll('.onlyNumber').forEach(function (element) {
+      element.addEventListener('input',function(e){
+        this.value = this.value.replace(/\D/g, '');
+      });
+      // Replace any non-digit characters with an empty string
+  });
+  
   </script>

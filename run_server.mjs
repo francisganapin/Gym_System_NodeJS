@@ -18,32 +18,8 @@ const mimeTypes = {
 const server = createServer(async (req, res) => {
 
 
-  // Show all available data in your database
-  if (req.url === '/select/trainor') {
-    try {
-      const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'root',
-        database: 'memberdb',
-      });
-
-      const [rows] = await connection.query('SELECT * FROM gym_trainor');
-      await connection.end();
-
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ success: true, data: rows }));
-    } catch (error) {
-      console.error('Error connecting to the database:', error);
-      res.writeHead(500, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ success: false, message: 'Error connecting to the database' }));
-    }
-    return;
-  }
 
 
-
- 
   // Show all available data in your gym member
   if (req.url === '/post/customers') {
     try {
@@ -222,8 +198,6 @@ const server = createServer(async (req, res) => {
     }
   
 
-
-
 /// show  item on gym
   if (req.url === '/post/item') {
     try {
@@ -248,7 +222,7 @@ const server = createServer(async (req, res) => {
   }
 
 
-  // Insert new member into the database
+  // Insert new item into the database
   if (req.url === '/insert/item' && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => {
@@ -282,10 +256,6 @@ const server = createServer(async (req, res) => {
     });
     return;
   }
-
-
-
-
 
 
 
@@ -323,7 +293,7 @@ const server = createServer(async (req, res) => {
     });
     return;
   }
-
+  // delete item database
   if (req.url === "/delete/item" && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => {
@@ -358,6 +328,223 @@ const server = createServer(async (req, res) => {
     return;
   }
   
+
+    // Show all available data in your database
+    if (req.url === '/select/trainor') {
+      try {
+        const connection = await mysql.createConnection({
+          host: 'localhost',
+          user: 'root',
+          password: 'root',
+          database: 'memberdb',
+        });
+  
+        const [rows] = await connection.query('SELECT * FROM gym_trainor');
+        await connection.end();
+  
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, data: rows }));
+      } catch (error) {
+        console.error('Error connecting to the database:', error);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, message: 'Error connecting to the database' }));
+      }
+      return;
+    }
+
+    // Insert new trainor into the database
+    if (req.url === '/insert/trainor' && req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => {
+        body += chunk.toString();
+      });
+  
+      req.on('end', async () => {
+        const {trainor_id,first_name, last_name, specialty, phone_number} = JSON.parse(body);
+  
+        try {
+          const connection = await mysql.createConnection({
+            host: 'localhost',
+
+            
+            user: 'root',
+            password: 'root',
+            database: 'memberdb',
+          });
+  
+          const sql = 'INSERT INTO gym_trainor (trainor_id,first_name, last_name, specialty, phone_number) VALUES  (?, ?, ?, ?, ?)';
+          const values = [trainor_id,first_name, last_name, specialty, phone_number];
+  
+          await connection.query(sql, values);
+          await connection.end();
+  
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, message: 'item was sucessfully inserted' }));
+        } catch (error) {
+          console.error('Error inserting data:', error);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, message: 'An error occurred while registering the trainor.' }));
+        }
+      });
+      return;
+    }
+
+    // delete trainor database
+    if (req.url === "/delete/trainor" && req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => {
+        body += chunk.toString();
+      });
+  
+      req.on('end', async () => {
+        const { trainor_id} = JSON.parse(body);
+  
+        try {
+          const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: 'root',
+            database: 'memberdb',
+          });
+  
+          const sql = 'DELETE FROM  gym_trainor  WHERE trainor_id = ?';
+          const values = [trainor_id];
+    
+          await connection.query(sql, values);
+          await connection.end();
+    
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, message: 'trainor was delete  successfully.' }));
+        } catch (error) {
+          console.error('Error updating data:', error);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, message: 'An error occurred while deleting the trainor.' }));
+        }
+      });
+      return;
+    }
+
+    
+    
+      // delete trainor database
+    if (req.url === "/option/trainor/class" && req.method === 'GET') {
+   
+          try {
+            const connection = await mysql.createConnection({
+              host: 'localhost',
+              user: 'root',
+              password: 'root',
+              database: 'memberdb',
+            });
+    
+            const [rows] = await connection.execute('SELECT * FROM gym_trainor');
+            await connection.end();
+    
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify(rows));
+          } catch (error) {
+            
+          }
+        
+        return;
+      }
+  
+    // Insert new trainor into the database
+    if (req.url === '/insert/trainor' && req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => {
+        body += chunk.toString();
+      });
+  
+      req.on('end', async () => {
+        const {trainor_id,first_name, last_name, specialty, phone_number} = JSON.parse(body);
+  
+        try {
+          const connection = await mysql.createConnection({
+            host: 'localhost',
+
+            
+            user: 'root',
+            password: 'root',
+            database: 'memberdb',
+          });
+  
+          const sql = 'INSERT INTO gym_trainor (trainor_id,first_name, last_name, specialty, phone_number) VALUES  (?, ?, ?, ?, ?)';
+          const values = [trainor_id,first_name, last_name, specialty, phone_number];
+  
+          await connection.query(sql, values);
+          await connection.end();
+  
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, message: 'item was sucessfully inserted' }));
+        } catch (error) {
+          console.error('Error inserting data:', error);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, message: 'An error occurred while registering the trainor.' }));
+        }
+      });
+      return;
+    }
+
+    // Insert new class into the database
+    if (req.url === '/insert/class' && req.method === 'POST') {
+      let body = '';
+      req.on('data', chunk => {
+        body += chunk.toString();
+      });
+  
+      req.on('end', async () => {
+        const {class_name,class_type, class_day,  class_hour, trainor_name} = JSON.parse(body);
+  
+        try {
+          const connection = await mysql.createConnection({
+            host: 'localhost',
+            user: 'root',
+            password: 'root',
+            database: 'memberdb',
+          });
+  
+          const sql = 'INSERT INTO gym_classes (class_name,class_type, class_day,  class_hour, trainor_name) VALUES  (?, ?, ?, ?, ?)';
+          const values = [class_name,class_type, class_day,  class_hour, trainor_name];
+  
+          await connection.query(sql, values);
+          await connection.end();
+  
+          res.writeHead(200, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: true, message: 'item was sucessfully inserted' }));
+        } catch (error) {
+          console.error('Error inserting data:', error);
+          res.writeHead(500, { 'Content-Type': 'application/json' });
+          res.end(JSON.stringify({ success: false, message: 'An error occurred while registering the trainor.' }));
+        }
+      });
+      return;
+    }
+    // show class on our gym
+    /// show  item on gym
+  if (req.url === '/post/gym_class') {
+    try {
+      const connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'root',
+        database: 'memberdb',
+      });
+
+      const [rows] = await connection.query('SELECT * FROM gym_classes');
+      await connection.end();
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: true, data: rows }));
+    } catch (error) {
+      console.error('Error connecting to the database:', error);
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ success: false, message: 'Error connecting to the database' }));
+    }
+    return;
+  }
+
+
   let filePath;
   if (req.url === '/' || req.url === '/homepage' || req.url === '/homepage.html') {
     filePath = join(process.cwd(), 'public/homepage.html');
@@ -374,7 +561,9 @@ const server = createServer(async (req, res) => {
       filePath = join(process.cwd(), 'navbar.html');
   } else if(req.url ==='/login'){
       filePath = join(process.cwd(),'public/login.html')
-  }
+  } else if(req.url ==='/gymclass'){
+    filePath = join(process.cwd(),'public/class.html')
+}
     else {
     // For other requests, try to serve static files
     filePath = join(process.cwd(), req.url);
