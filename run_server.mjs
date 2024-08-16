@@ -476,7 +476,7 @@ const server = createServer(async (req, res) => {
           await connection.end();
   
           res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ success: true, message: 'item was sucessfully inserted' }));
+          res.end(JSON.stringify({ success: true, message: 'item was sucessfully inserted trainor' }));
         } catch (error) {
           console.error('Error inserting data:', error);
           res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -520,7 +520,9 @@ const server = createServer(async (req, res) => {
       });
       return;
     }
+
     // show class on our gym
+    
     /// show  item on gym
   if (req.url === '/post/gym_class') {
     try {

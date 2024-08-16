@@ -40,6 +40,7 @@
 
 
   <h1>Hello this local web application</h1>
+  
   <h1>it has login for member</h1>
   <h1>Update,Register,and list of member</h1>
   <h1> it has stock management</h1>
@@ -49,3 +50,72 @@
 
 </body>
 </html>
+
+
+<script>
+
+async function trainorData() {
+    try {
+        const response = await fetch('/select/trainor', {
+            method: 'GET',  // Change to 'GET'
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            const trainers = result.data.map(item => {
+                return `
+                    <div class="trainer">
+                        <h1 class="trainor-id">Trainor Id: ${item.trainor_id || 'N/A'}</h1>
+                        <h1 class="first-name">First Name: ${item.first_name || 'N/A'}</h1>
+                        <h1 class="last-name">Last Name: ${item.last_name || 'N/A'}</h1>
+                        <h1 class="specialty">Specialty: ${item.specialty || 'N/A'}</h1>
+                        <h1 class="phone">Phone: ${item.phone_number || 'N/A'}</h1>
+                    </div>
+                `;
+            }).join('');
+
+            // Insert the trainer information into the trainer-list div
+            document.getElementById('trainor_list').innerHTML = trainers;
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while fetching the trainer data.');
+    }
+}
+
+// Example usage:
+trainorData();
+
+function myFunction_trainor() {
+    // Declare variables
+    var input, filter, list, trainers, i, txtValue;
+    input = document.getElementById('myInput_trainor');
+    filter = input.value.toUpperCase();
+    list = document.getElementById("trainor_list");
+    trainers = list.getElementsByClassName('trainer');
+
+    // Loop through all trainer divs, and hide those who don't match the search query
+    for (i = 0; i < trainers.length; i++) {
+        let firstName = trainers[i].getElementsByClassName("first-name")[0]; 
+        let lastName = trainers[i].getElementsByClassName("last-name")[0];
+        
+        if (firstName || lastName) {
+            let firstNameValue = firstName.textContent || firstName.innerText;
+            let lastNameValue = lastName.textContent || lastName.innerText;
+            txtValue = (firstNameValue + " " + lastNameValue).toUpperCase(); // Combine first and last names
+
+            if (txtValue.indexOf(filter) > -1) {
+                trainers[i].style.display = "";
+            } else {
+                trainers[i].style.display = "none";
+            }
+        }
+    }
+}
+
+</script>

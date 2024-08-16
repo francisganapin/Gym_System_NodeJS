@@ -151,10 +151,13 @@
         <div class="container">
             <header>
                 <h1>Gym Classes</h1>
-                <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names...">
+
+            <div class="form-group" >
+                    <input  class='' type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for Class...">
+            </div>
             </header>
             
-            <div class="trainer-list" id="trainor_list">
+            <div class="trainer-list" id="class_list">
                 <!-- Trainer information will be dynamically inserted here -->
             </div>
     
@@ -188,9 +191,6 @@
                         </div>
                         
 
-
-                        
-                        
                         <div class="form-group">
                             <select required name="class_day">
                                 <option value="" disabled selected>Choose Class day</option>
@@ -203,8 +203,6 @@
                             </select>
                         </div>
                         
-
-
                         
                         <div class="form-group">
                             <select required name="class_hour">
@@ -267,17 +265,18 @@
                 const trainers = result.data.map(item => {
                     return `
                         <div class="trainer">
+                            <h1>Traino Name: ${item.trainor_name || 'N/A'}</h1>
                             <h1>Class Name: ${item.class_name || 'N/A'}</h1>
                             <h1>Class Type: ${item.class_type || 'N/A'}</h1>
                             <h1>Day: ${item.class_day || 'N/A'}</h1>
                             <h1>Class Hour: ${item.class_hour || 'N/A'}</h1>
-                            <h1>Phone: ${item.trainor_name || 'N/A'}</h1>
+                            
                         </div>
                     `;
                 }).join('');
     
                 // Insert the trainer information into the trainer-list div
-                document.getElementById('trainor_list').innerHTML = trainers;
+                document.getElementById('class_list').innerHTML = trainers;
             } else {
                 alert(result.message);
             }
@@ -366,15 +365,17 @@
           await fetchData(); // Refresh data after successful registration
           alert('Sucessful inserted class')
         } else {
-          alert(result.message);
-          alert('Sucessful inserted class')
+          location.reload();
+          alert('An error occurred while inserting item.');
         }
       } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred while inserting item.');
+        location.reload();
       }
+
     });
   </script>
+
 
 
 
@@ -384,19 +385,16 @@
       var input, filter, table, rows, i, txtValue;
       input = document.getElementById('myInput');
       filter = input.value.toUpperCase();
-      table = document.getElementById("trainor_list");
+      table = document.getElementById("class_list");
       rows = table.getElementsByTagName('div');
   
       // Loop through all table rows, and hide those who don't match the search query
       for (i = 1; i < rows.length; i++) { // Start at 1 to skip the header row
-        let firstName = rows[i].getElementsByTagName("h1")[1]; // First Name is in the 5th column
-        let lastName = rows[i].getElementsByTagName("h1")[2]; // Last Name is in the 6th column
-        
-        if (firstName || lastName) {
-          let firstNameValue = firstName.textContent || firstName.innerText;
-          let lastNameValue = lastName.textContent || lastName.innerText;
-          txtValue = (firstNameValue + " " + lastNameValue).toUpperCase(); // Combine first and last names
-  
+        let className = rows[i].getElementsByTagName("h1")[1]; // get class Name is in the 5th column
+       
+        if (className) {
+          let classNameValue = className.textContent || className.innerText;
+          txtValue = (classNameValue).toUpperCase(); // Combine first and last names
           if (txtValue.indexOf(filter) > -1) {
             rows[i].style.display = "";
           } else {

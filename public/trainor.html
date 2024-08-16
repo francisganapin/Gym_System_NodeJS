@@ -116,6 +116,8 @@
         .btn:focus {
             outline: none;
         }
+
+        
     </style>
 
     <!DOCTYPE html>
@@ -135,6 +137,9 @@
 
     
         <div class="container">
+        <div class="form-group" >
+                <input  class='' type="text" id="myInput_trainor" onkeyup="myFunction_trainor()" placeholder="Search for Trainor">
+        </div>
             <div class="trainer-list" id="trainor_list">
                 <!-- Trainer information will be dynamically inserted here -->
             </div>
@@ -142,7 +147,9 @@
             <div class="form-row">
                 <div class="form-container">
                     <h2>Registration Form for Trainer</h2>
+
                     <form id="registration-form">
+
                         <div class="form-group">
                             <input type="text" name="trainor_id" placeholder="Employee ID" required>
                             <div class="icon">
@@ -214,45 +221,72 @@
 
 <!-- fetch list of trainor-->
 <script>
-    async function trainorData() {
-        try {
-            const response = await fetch('/select/trainor', {
-                method: 'GET',  // Change to 'GET'
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-    
-            const result = await response.json();
-            if (result.success) {
-                const trainers = result.data.map(item => {
-                    return `
-                        <div class="trainer">
-                            <h1>Trainor Id: ${item.trainor_id || 'N/A'}</h1>
-                            <h1>First Name: ${item.first_name || 'N/A'}</h1>
-                            <h1>Last Name: ${item.last_name || 'N/A'}</h1>
-                            <h1>Specialty: ${item.specialty || 'N/A'}</h1>
-                            <h1>Phone: ${item.phone_number || 'N/A'}</h1>
-                        </div>
-                    `;
-                }).join('');
-    
-                // Insert the trainer information into the trainer-list div
-                document.getElementById('trainor_list').innerHTML = trainers;
-            } else {
-                alert(result.message);
+
+async function trainorData() {
+    try {
+        const response = await fetch('/select/trainor', {
+            method: 'GET',  // Change to 'GET'
+            headers: {
+                'Content-Type': 'application/json',
             }
-        } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred while fetching the trainer data.');
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            const trainers = result.data.map(item => {
+                return `
+                    <div class="trainer">
+                        <h1 class="trainor-id">Trainor Id: ${item.trainor_id || 'N/A'}</h1>
+                        <h1 class="first-name">First Name: ${item.first_name || 'N/A'}</h1>
+                        <h1 class="last-name">Last Name: ${item.last_name || 'N/A'}</h1>
+                        <h1 class="specialty">Specialty: ${item.specialty || 'N/A'}</h1>
+                        <h1 class="phone">Phone: ${item.phone_number || 'N/A'}</h1>
+                    </div>
+                `;
+            }).join('');
+
+            // Insert the trainer information into the trainer-list div
+            document.getElementById('trainor_list').innerHTML = trainers;
+        } else {
+            alert(result.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while fetching the trainer data.');
+    }
+}
+
+// Example usage:
+trainorData();
+
+function myFunction_trainor() {
+    // Declare variables
+    var input, filter, list, trainers, i, txtValue;
+    input = document.getElementById('myInput_trainor');
+    filter = input.value.toUpperCase();
+    list = document.getElementById("trainor_list");
+    trainers = list.getElementsByClassName('trainer');
+
+    // Loop through all trainer divs, and hide those who don't match the search query
+    for (i = 0; i < trainers.length; i++) {
+        let firstName = trainers[i].getElementsByClassName("first-name")[0]; 
+        let lastName = trainers[i].getElementsByClassName("last-name")[0];
+        
+        if (firstName || lastName) {
+            let firstNameValue = firstName.textContent || firstName.innerText;
+            let lastNameValue = lastName.textContent || lastName.innerText;
+            txtValue = (firstNameValue + " " + lastNameValue).toUpperCase(); // Combine first and last names
+
+            if (txtValue.indexOf(filter) > -1) {
+                trainers[i].style.display = "";
+            } else {
+                trainers[i].style.display = "none";
+            }
         }
     }
-    
-    // Example usage:
-    trainorData();
-    </script>
-    
+}
 
+</script>
 
 <!-- show nav bar-->
 <script>
@@ -289,12 +323,12 @@
           await fetchData(); // Refresh data after successful registration
           alert('Sucessful inserted trainor')
         } else {
-          alert(result.message);
-          alert('Sucessful inserted trainor')
+            console.error('Error:', error);
+            alert('An error occurred while inserting item.');
         }
       } catch (error) {
         console.error('Error:', error);
-        alert('An error occurred while inserting item.');
+        location.reload();
       }
     });
   </script>
@@ -335,6 +369,7 @@
         await fetchData(); // Refresh data after successful registration
       }
     });
+    
   </script>
 
 
