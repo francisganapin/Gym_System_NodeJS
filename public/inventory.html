@@ -35,6 +35,18 @@
       gap: 20px;
   }
 
+  .trainer-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            margin-top: 20px;
+            max-height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+        }
 
 
   h2 {
@@ -165,33 +177,33 @@
 
 <body>
 
+  
 <main class="container">
+
 <!-- Members List -->
-<div class="table-container">
-  <h2>Members List</h2>
-  <!-- Search input outside of table -->
-  <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names...">
-  <table id="data-table">
-      <thead>
-          <tr>
-              <th>Id</th>
-              <th>Item</th>
-              <th>Stock</th>
-              <th>Description</th>
-              <th>Supplier</th>
-              <th>Phone Number</th>
-          </tr>
-      </thead>
-      <tbody id="data-body">
-          <!-- Data will be populated here -->
-      </tbody>
-  </table>
-  <!-- Pagination controls -->
-  <div class="pagination">
-      <button id="btn_prev" class="btn">Prev</button>
-      <span>Page: <span id="page"></span></span>
-      <button id="btn_next" class="btn">Next</button>
-  </div>
+<input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names...">
+
+<div class="trainer-list">
+  <div class="table-container">
+      <h2>Members List</h2>
+        <!-- Search input outside of table -->
+        
+          <table id="data-table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Item</th>
+                    <th>Stock</th>
+                    <th>Description</th>
+                    <th>Supplier</th>
+                    <th>Phone Number</th>
+                </tr>
+              </thead>
+            <tbody id="data-body">
+                <!-- Data will be populated here -->
+            </tbody>
+    </table>
+</div>
 </div>
 
 <!-- Forms Row -->
@@ -312,8 +324,6 @@
 
 <!--show database-->
 <script>
-  var current_page = 1;
-  var records_per_page = 5;
 
   async function fetchData() {
     try {
@@ -332,68 +342,20 @@
               <td class="px-5 py-4 whitespace-nowrap">${item.phone_number|| 'N/A'}</td>
             </tr>
           `;
-        });
+        }).join('');
 
-        function changePage(page) {
-          const tbody = document.querySelector('#data-table tbody');
-          tbody.innerHTML = ''; // Clear existing rows
-
-          if (page < 1) page = 1;
-          if (page > numPages()) page = numPages();
-
-          const start = (page - 1) * records_per_page;
-          const end = start + records_per_page;
-
-          const paginatedData = rows.slice(start, end);
-          tbody.innerHTML = paginatedData.join('');
-
-          document.getElementById("page").innerHTML = page;
-
-          if (page == 1) {
-            document.getElementById("btn_prev").style.visibility = "hidden";
-          } else {
-            document.getElementById("btn_prev").style.visibility = "visible";
-          }
-
-          if (page == numPages()) {
-            document.getElementById("btn_next").style.visibility = "hidden";
-          } else {
-            document.getElementById("btn_next").style.visibility = "visible";
-          }
+        // Insert the item information into the data-body tbody
+        document.getElementById('data-body').innerHTML = rows;
+        } else {
+        alert(result.message);
+        }
+        } catch (error) {
+        console.error('Error:', error);
+        alert('An error occurred while fetching the item data.');
+        }
         }
 
-        function prevPage() {
-          if (current_page > 1) {
-            current_page--;
-            changePage(current_page);
-          }
-        }
-
-        function nextPage() {
-          if (current_page < numPages()) {
-            current_page++;
-            changePage(current_page);
-          }
-        }
-
-        function numPages() {
-          return Math.ceil(rows.length / records_per_page);
-        }
-
-        document.getElementById("btn_prev").addEventListener('click', prevPage);
-        document.getElementById("btn_next").addEventListener('click', nextPage);
-
-        changePage(current_page);
-
-      } else {
-        throw new Error(result.message);
-      }
-    } catch (error) {
-      document.getElementById('error').textContent = `Error fetching data: ${error.message}`;
-    }
-  }
-
-  window.onload = fetchData;
+window.onload = fetchData;
 
 </script>
 
