@@ -115,6 +115,40 @@
         border-radius: 8px;
         box-sizing: border-box;
     }
+    .scrollable-table-container {
+            width: 100%;
+            max-height: 600px; /* Adjust height to show 5 items */
+            overflow-y: auto;
+            border: 2px solid #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        /* Optional: Custom scrollbar styling */
+        .scrollable-table-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollable-table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .scrollable-table-container::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+
+        .scrollable-table-container::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
 </style>
 
   <div id="navbar"></div>
@@ -132,7 +166,7 @@
     <h2>Members List</h2>
     <!-- Search input outside of table -->
     <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names...">
-    <table id="data-table">
+    <table >
         <thead>
             <tr>
                 <th>ID</th>
@@ -144,16 +178,16 @@
                 <th>Phone Number</th>
             </tr>
         </thead>
+     
+</table>
+
+<div class="scrollable-table-container">
+  <table id="data-table">
         <tbody id="data-body">
             <!-- Data will be populated here -->
         </tbody>
+
     </table>
-    <!-- Pagination controls -->
-    <div class="pagination">
-        <button id="btn_prev" class="btn">Prev</button>
-        <span>Page: <span id="page"></span></span>
-        <button id="btn_next" class="btn">Next</button>
-    </div>
 </div>
 
 <!-- Forms Row -->
@@ -319,8 +353,6 @@
 
 <!--show database-->
 <script>
-  var current_page = 1;
-  var records_per_page = 8;
 
   async function fetchData() {
     try {
@@ -340,69 +372,20 @@
               <td class="px-5 py-4 whitespace-nowrap">${item.Phone_Number || 'N/A'}</td>
             </tr>
           `;
-        });
-
-        function changePage(page) {
-          const tbody = document.querySelector('#data-table tbody');
-          tbody.innerHTML = ''; // Clear existing rows
-
-          if (page < 1) page = 1;
-          if (page > numPages()) page = numPages();
-
-          const start = (page - 1) * records_per_page;
-          const end = start + records_per_page;
-
-          const paginatedData = rows.slice(start, end);
-          tbody.innerHTML = paginatedData.join('');
-
-          document.getElementById("page").innerHTML = page;
-
-          if (page == 1) {
-            document.getElementById("btn_prev").style.visibility = "hidden";
-          } else {
-            document.getElementById("btn_prev").style.visibility = "visible";
-          }
-
-          if (page == numPages()) {
-            document.getElementById("btn_next").style.visibility = "hidden";
-          } else {
-            document.getElementById("btn_next").style.visibility = "visible";
-          }
+        }).join('');
+                    // Insert the item information into the data-body tbody
+                    document.getElementById('data-body').innerHTML = rows;
+                } else {
+                    alert(result.message);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred while fetching the item data.');
+            }
         }
 
-        function prevPage() {
-          if (current_page > 1) {
-            current_page--;
-            changePage(current_page);
-          }
-        }
-
-        function nextPage() {
-          if (current_page < numPages()) {
-            current_page++;
-            changePage(current_page);
-          }
-        }
-
-        function numPages() {
-          return Math.ceil(rows.length / records_per_page);
-        }
-
-        document.getElementById("btn_prev").addEventListener('click', prevPage);
-        document.getElementById("btn_next").addEventListener('click', nextPage);
-
-        changePage(current_page);
-
-      } else {
-        throw new Error(result.message);
-      }
-    } catch (error) {
-      document.getElementById('error').textContent = `Error fetching data: ${error.message}`;
-    }
-  }
-
-  window.onload = fetchData;
-
+        // Call fetchData function to load the data when the page loads
+        fetchData();
 </script>
 
 <!--update mbmer-->
