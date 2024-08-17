@@ -293,16 +293,17 @@ const server = createServer(async (req, res) => {
     });
     return;
   }
+  
   // delete item database
   if (req.url === "/delete/item" && req.method === 'POST') {
     let body = '';
     req.on('data', chunk => {
       body += chunk.toString();
     });
-
+  
     req.on('end', async () => {
-      const { item_name} = JSON.parse(body);
-
+      const { id } = JSON.parse(body);  // Use `id` instead of `item_name`
+  
       try {
         const connection = await mysql.createConnection({
           host: 'localhost',
@@ -310,23 +311,24 @@ const server = createServer(async (req, res) => {
           password: 'root',
           database: 'memberdb',
         });
-
-        const sql = 'DELETE FROM  gym_item  WHERE item_name = ?';
-        const values = [item_name];
   
+        const sql = 'DELETE FROM gym_item WHERE id = ?';
+        const values = [id];
+    
         await connection.query(sql, values);
         await connection.end();
-  
+    
         res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ success: true, message: 'item was delete  successfully.' }));
+        res.end(JSON.stringify({ success: true, message: 'Item was deleted successfully.' }));
       } catch (error) {
-        console.error('Error updating data:', error);
+        console.error('Error deleting item:', error);
         res.writeHead(500, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: false, message: 'An error occurred while deleting the item.' }));
       }
     });
     return;
   }
+  
   
 
     // Show all available data in your database
