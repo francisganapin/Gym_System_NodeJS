@@ -19,7 +19,7 @@ cursor.execute("USE memberdb")
 
 # Create the table
 cursor.execute('''
-CREATE TABLE IF NOT EXIST gym_members (
+CREATE TABLE gym_members (
   id INT AUTO_INCREMENT PRIMARY KEY,
   id_card VARCHAR(255),
   expiry DATE,

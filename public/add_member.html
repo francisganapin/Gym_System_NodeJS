@@ -363,13 +363,13 @@
         const rows = result.data.map(item => {
           return `
            <tr>
-              <td class="px-4 py-4 whitespace-nowrap">${item.ID || 'N/A'}</td>
-              <td class="px-5 py-4 whitespace-nowrap">${item.ID_CARD  || 'N/A'}</td>
-              <td class="px-5 py-4 whitespace-nowrap">${item.Expiry ? new Date(item.Expiry).toLocaleDateString() : 'N/A'}</td>
-              <td class="px-5 py-4 whitespace-nowrap">${item.Membership || 'N/A'}</td>
-              <td class="px-5 py-4 whitespace-nowrap">${item.First_Name || 'N/A'}</td>
-              <td class="px-5 py-4 whitespace-nowrap">${item.Last_Name || 'N/A'}</td>
-              <td class="px-5 py-4 whitespace-nowrap">${item.Phone_Number || 'N/A'}</td>
+              <td class="px-4 py-4 whitespace-nowrap">${item.id || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.id_card  || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.expiry  || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.membership || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.first_name || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.last_name || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.phone_number || 'N/A'}</td>
             </tr>
           `;
         }).join('');
