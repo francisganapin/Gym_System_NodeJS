@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Member</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f0f4f8;
+      color: #333;
+      font-family: 'Roboto', sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    #member-count {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #4a5568;
+    }
+
+    .header {
+      background-color: #ffffff;
+      padding: 1.5rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      margin-top: 1rem;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    th {
+      background-color: #edf2f7;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f7fafc;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <div id="navbar"></div>
+
+  <!-- Member Count -->
+  <div class="container">
+    <div class="header">
+      <h1 id="member-count" class="text-center">Loading...</h1>
+    </div>
+  </div>
+
+  <!-- Membership Data Table -->
+  <div class="container">
+    <div class="header">
+      <table id="data-table">
+        <thead>
+          <tr>
+            <th>Membership Type</th>
+            <th>Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Data will be inserted here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Navbar Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        fetch('navbar.html')
+          .then(response => response.text())
+          .then(data => {
+            document.getElementById('navbar').innerHTML = data;
+          });
+    });
+  </script>
+
+  <!-- Member Count Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/count/gym/member')
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            const totalMembers = data.data[0].total_members; // Adjust based on your response structure
+            document.getElementById('member-count').textContent = `Total Members: ${totalMembers}`;
+          } else {
+            document.getElementById('member-count').textContent = 'Failed to load member count.';
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching member count:', error);
+          document.getElementById('member-count').textContent = 'Error loading member count.';
+        });
+    });
+  </script>
+
+  <!-- Membership Data Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      fetch('/count/gym/member/membership')
+        .then(response => response.json())
+        .then(responseData => {
+          if (responseData.success) {
+            const data = responseData.data;
+            console.log(data);
+
+            const tableBody = document.querySelector('#data-table tbody');
+            tableBody.innerHTML = '';
+
+            data.forEach(item => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${item.membership}</td>
+                <td>${item.count}</td>
+              `;
+              tableBody.appendChild(row);
+            });
+          } else {
+            console.error('Error: Data fetch was unsuccessful.');
+          }
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    });
+  </script>
+
+</body>
+
+</html>

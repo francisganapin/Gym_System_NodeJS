@@ -21,7 +21,7 @@ cursor.execute("USE memberdb")
 cursor.execute('''
 CREATE TABLE gym_members (
   id INT AUTO_INCREMENT PRIMARY KEY,
-  id_card VARCHAR(255),
+  id_card VARCHAR(255) UNIQUE,
   expiry DATE,
   membership VARCHAR(255),
   first_name VARCHAR(255),
