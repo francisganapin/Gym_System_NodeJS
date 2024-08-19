@@ -25,7 +25,7 @@ To set up your environment, ensure you have the following installed:
 - 👥 Member Navigation - Member List - Update - Delete -  Add
 - 📊 Stat Navigation - Count Number of Memberships - Total Number of Members
 
-## USEFULL Comand:
+## 🛠 Useful Commands:
   ```bash
   $taskkill /F /IM node.exe  #it will kill all node.
   $npm start                 #to start our application
