@@ -4,14 +4,9 @@ My Project I make this application time by time since i need to showcase some of
 
 We using to this project are NodeJs,MySql,Html,Javascript,CSS.
 
-  Install this following.
   
-  #npm  install mysql2
-  #pip search mysql-connector
-  
-if You forget to close your node use this one taskkill /F /IM node.exe it will kill all node.
+taskkill /F /IM node.exe it will kill all node.
 
-You could create your own database on mysql siply navigate python_sql folder to create your own database.
 
 
 # 📋 Project Requirements
@@ -30,6 +25,10 @@ To set up your environment, ensure you have the following installed:
   
   #npm  install mysql2
   #pip search mysql-connector
+
+  If you forgot to clsoe the nodes you can use this command:
+  ```bash
+    taskkill /F /IM node.exe it will kill all node.
   
 - ✅ Features and Functionality
 -  📦 Item Inventory - pdate - Delete
