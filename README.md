@@ -25,7 +25,7 @@ To set up your environment, ensure you have the following installed:
 - **🐍 Python 3.11**
 - **🌐 Django 4.2**
 - **🌐 Node.js v20.16.0**
-- **🛢  MySql 8.0.39 **
+- **🛢  mySQL v8.0.39**
   ```bash
   
   #npm  install mysql2
