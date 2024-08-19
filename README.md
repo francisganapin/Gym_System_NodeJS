@@ -25,10 +25,14 @@ To set up your environment, ensure you have the following installed:
 - 👥 Member Navigation - Member List - Update - Delete -  Add
 - 📊 Stat Navigation - Count Number of Memberships - Total Number of Members
 
+
+
+### 2. ** ![Screenshot 2024-08-19 164131](https://github.com/user-attachments/assets/c2a64cfb-481e-487a-81b6-c9f55836171f)**
+
 ## 🛠 Useful Commands:
 ```bash
 taskkill /F /IM node.exe   # This will kill all Node.js processes
 npm start                  # This starts our application
 
 
-### 2. ** ![Screenshot 2024-08-19 164131](https://github.com/user-attachments/assets/c2a64cfb-481e-487a-81b6-c9f55836171f)**
+
