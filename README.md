@@ -1,13 +1,6 @@
 
 
-My Project I make this application time by time since i need to showcase some of my project. 
-
-We using to this project are NodeJs,MySql,Html,Javascript,CSS.
-
-  
-taskkill /F /IM node.exe it will kill all node.
-
-
+I made this application time by time since i need to showcase some of my project. 
 
 # 📋 Project Requirements
 
@@ -26,15 +19,12 @@ To set up your environment, ensure you have the following installed:
   #npm  install mysql2
   #pip search mysql-connector
 
-  
-
-If you forgot to clsoe the nodes you can use this command:
-  ```bash
-  #taskkill /F /IM node.exe it will kill all node.
-
 - ✅ Features and Functionality
 -  📦 Item Inventory - pdate - Delete
 - 🏋️‍♂️ Trainer Navigation - Trainer List - Update - Delete
 - 👥 Member Navigation - Member List - Update - Delete -  Add
 - 📊 Stat Navigation - Count Number of Memberships - Total Number of Members
 
+If you forgot to clsoe the nodes you can use this command:
+  ```bash
+  #taskkill /F /IM node.exe it will kill all node.
