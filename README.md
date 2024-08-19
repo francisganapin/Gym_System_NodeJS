@@ -30,5 +30,5 @@ To set up your environment, ensure you have the following installed:
 taskkill /F /IM node.exe   # This will kill all Node.js processes
 npm start                  # This starts our application
 
-
+```markdown
 ![Screenshot 2024-08-19 164131](https://github.com/user-attachments/assets/c2a64cfb-481e-487a-81b6-c9f55836171f)
