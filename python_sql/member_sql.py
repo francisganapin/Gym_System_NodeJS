@@ -19,7 +19,7 @@ cursor.execute("USE memberdb")
 
 # Create the table
 cursor.execute('''
-CREATE TABLE gym_members (
+CREATE TABLE IF NOT EXISTS gym_members (
   id INT AUTO_INCREMENT PRIMARY KEY,
   id_card VARCHAR(255) UNIQUE,
   expiry DATE,
@@ -31,6 +31,7 @@ CREATE TABLE gym_members (
 );
 ''')
 
+# Data to be inserted
 members_data = [
     ('ID001', '2025-01-01', 'Gold', 'Juan', 'Dela Cruz', '0917123456789', '123 Mabini St'),
     ('ID002', '2025-02-01', 'Silver', 'Maria', 'Santos', '0918234567890', '456 Rizal St'),
@@ -54,17 +55,11 @@ members_data = [
     ('ID020', '2026-08-01', 'Silver', 'Alfonso', 'Vega', '0916012345678', '456 Aguinaldo St')
 ]
 
-# Execute the batch insert
+# Execute the batch insert with correct placeholders
 cursor.executemany('''
-INSERT INTO gym_members (ID_CARD, Expiry, Membership, First_Name, Last_Name, Phone_Number, Address)
-VALUES (?, ?, ?, ?, ?, ?, ?)
+INSERT INTO gym_members (id_card, expiry, membership, first_name, last_name, phone_number, address)
+VALUES (%s, %s, %s, %s, %s, %s, %s)
 ''', members_data)
-
-# Commit the transaction
-conn.commit()
-
-# Close the connection
-conn.close()
 
 # Commit the transaction
 conn.commit()
