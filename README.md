@@ -26,10 +26,12 @@ To set up your environment, ensure you have the following installed:
   #npm  install mysql2
   #pip search mysql-connector
 
-  If you forgot to clsoe the nodes you can use this command:
-  ```bash
-    taskkill /F /IM node.exe it will kill all node.
   
+
+If you forgot to clsoe the nodes you can use this command:
+  ```bash
+     #taskkill /F /IM node.exe it will kill all node.
+
 - ✅ Features and Functionality
 -  📦 Item Inventory - pdate - Delete
 - 🏋️‍♂️ Trainer Navigation - Trainer List - Update - Delete
