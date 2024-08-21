@@ -1,0 +1,61 @@
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+<div class="trainer-list">
+    <div class="table-container">
+        <h2>Members List</h2>
+          <!-- Search input outside of table -->
+          
+            <table id="data-table">
+              <thead>
+                  <tr>
+                      <th>Id</th>
+                      <th>Id card</th>
+                      <th>first name</th>
+                      <th>last name</th>
+                      <th>login</th>
+                     
+                  </tr>
+                </thead>
+              <tbody id="data-body">
+                  <!-- Data will be populated here -->
+              </tbody>
+      </table>
+  </div>
+  </div>
+
+<script>
+async function fetchLoginRecord(){
+    try{
+        const response = await fetch('record/member/login');
+        const result = await response.json();
+
+        if(result.success){
+            const rows = result.data.map(item => {
+              return`
+              <tr>
+                <td>${item.id || 'N/A'} </td>
+                <td>${item.id_card || 'N/A'}</td>
+               <td> ${item.first_name || 'N/A'}</td>
+               <td>  ${item.last_name || 'N/A'}</td>
+                <td> ${item.login || 'N/A'} </td>
+              </tr>`;  
+            }).join('');
+        // Insert the item information into the data-body tbody
+        document.getElementById('data-body').innerHTML = rows;
+      } else {
+        alert(result.message);
+        console.log(result);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while fetching the item data.');
+    }
+  }
+
+// Call fetchLoginRecord function to load the data when the page loads
+fetchLoginRecord();
+
+
+</script>

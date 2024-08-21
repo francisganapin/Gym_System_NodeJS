@@ -155,7 +155,7 @@ const server = createServer(async (req, res) => {
                 last_name:last_name,
                 login_date:login_date
               }));
-              
+
               await connection.end();
           } else {
               res.writeHead(404, { 'Content-Type': 'application/json' });
@@ -538,6 +538,33 @@ if (req.url === '/post/gym_class') {
     return;
   }
 
+
+// record list for gym login member
+if (req.url === '/record/member/login') {
+  try {
+    const connection = await mysql.createConnection({
+      host: 'localhost',
+      user: 'root',
+      password: 'root',
+      database: 'memberdb',
+    });
+    const [rows] = await connection.query('SELECT * FROM login_record');
+    await connection.end();
+
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: true, data: rows }));
+    console.log(rows);
+  } catch (error) {
+    console.error('Error connecting to the database:', error);
+    res.writeHead(500, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ success: false, message: 'Error connecting to the database' }));
+  }
+  return;
+}
+
+
+
+
   
     // Show number  gym member available data in your gym member
     if (req.url === '/count/gym/member/membership') {
@@ -552,7 +579,7 @@ if (req.url === '/post/gym_class') {
         const [rows] = await connection.query('SELECT membership, COUNT(*) AS count FROM gym_members GROUP BY membership');
         await connection.end();
 
-
+        
         console.log(rows)
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -583,6 +610,9 @@ if (req.url === '/post/gym_class') {
   }
    else if (req.url === '/navbar') {
       filePath = join(process.cwd(), 'navbar.html');
+  }
+    else if (req.url === '/gym_record_login') {
+       filePath = join(process.cwd(), 'public/gym_record_login.html');
   } else if(req.url ==='/login'){
       filePath = join(process.cwd(),'public/login.html')
   } else if(req.url ==='/gymclass'){

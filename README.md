@@ -20,9 +20,9 @@ To set up your environment, ensure you have the following installed:
   #pip search mysql-connector
 
 - ✅ Features and Functionality
--  📦 Item Inventory - update - Delete
+-  📦 Item Inventory - update - Delete 
 - 🏋️‍♂️ Trainer Navigation - Trainer List - Update - Delete
-- 👥 Member Navigation - Member List - Update - Delete -  Add
+- 👥 Member Navigation - Member List - Update - Delete - Add - Login Record
 - 📊 Stat Navigation - Count Number of Memberships - Total Number of Members
 
 
