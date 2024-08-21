@@ -353,19 +353,21 @@
 
 <!--show database-->
 <script>
-
   async function fetchData() {
     try {
       const response = await fetch('/post/customers');
       const result = await response.json();
       
+      // Print the result to the console
+      console.log('Fetch result:', result);
+   
       if (result.success) {
         const rows = result.data.map(item => {
           return `
            <tr>
               <td class="px-4 py-4 whitespace-nowrap">${item.id || 'N/A'}</td>
-              <td class="px-5 py-4 whitespace-nowrap">${item.id_card  || 'N/A'}</td>
-              <td class="px-5 py-4 whitespace-nowrap">${item.expiry  || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.id_card || 'N/A'}</td>
+              <td class="px-5 py-4 whitespace-nowrap">${item.expiry || 'N/A'}</td>
               <td class="px-5 py-4 whitespace-nowrap">${item.membership || 'N/A'}</td>
               <td class="px-5 py-4 whitespace-nowrap">${item.first_name || 'N/A'}</td>
               <td class="px-5 py-4 whitespace-nowrap">${item.last_name || 'N/A'}</td>
@@ -373,20 +375,22 @@
             </tr>
           `;
         }).join('');
-                    // Insert the item information into the data-body tbody
-                    document.getElementById('data-body').innerHTML = rows;
-                } else {
-                    alert(result.message);
-                }
-            } catch (error) {
-                console.error('Error:', error);
-                alert('An error occurred while fetching the item data.');
-            }
-        }
+        // Insert the item information into the data-body tbody
+        document.getElementById('data-body').innerHTML = rows;
+      } else {
+        alert(result.message);
+        console.log(result);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert('An error occurred while fetching the item data.');
+    }
+  }
 
-        // Call fetchData function to load the data when the page loads
-        fetchData();
+  // Call fetchData function to load the data when the page loads
+  fetchData();
 </script>
+
 
 <!--update mbmer-->
 <script>

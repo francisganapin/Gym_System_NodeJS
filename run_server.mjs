@@ -34,6 +34,7 @@ const server = createServer(async (req, res) => {
  
        res.writeHead(200, { 'Content-Type': 'application/json' });
        res.end(JSON.stringify({ success: true, data: rows }));
+       console.log(rows)
      } catch (error) {
        console.error('Error connecting to the database:', error);
        res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -113,47 +114,61 @@ const server = createServer(async (req, res) => {
      return true; // Indicate that the request was handled
  }
 
-    // show login  member data
-    if (req.url === "login/gym_member" && req.method === 'POST') {
-      let body = '';
-      req.on('data', chunk => {
-        body += chunk.toString();
-      });
-  
-      req.on('end', async () => {
-        const { id } = JSON.parse(body);
-  
-        try {
+
+ // show login  member data
+ if (req.url === "/login/gym_member" && req.method === 'POST') {
+  let body = '';
+  req.on('data', chunk => {
+      body += chunk.toString();
+  });
+
+  req.on('end', async () => {
+      const { id_card } = JSON.parse(body);  // Assuming 'id' is the 'id_card' value
+
+      try {
           const connection = await mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: 'root',
-            database: 'memberdb',
+              host: 'localhost',
+              user: 'root',
+              password: 'root',
+              database: 'memberdb',
           });
-  
-          const sql = 'SELECT Expiry FROM gym_members WHERE TRIM(ID_CARD) = ?'
-          const [rows] = await connection.query(sql, [id]);
-  
-          await connection.end();
-  
-          console.log('Fetched rows:', rows);
+
+          const sql = `SELECT expiry, first_name, last_name FROM gym_members WHERE id_card = ?`;
+          const [rows] = await connection.execute(sql, [id_card]); 
+
+
+
           if (rows.length > 0) {
-            const expiry = rows[0].Expiry;
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ success: true, message: 'Member fetched successfully.', expiry: expiry }));
+            
+              const { expiry, first_name, last_name } = rows[0];
+
+              const insert_login ='INSERT login_record(id_card,first_name,last_name,login) VALUES (?,?,?,?)';
+              const login_date = new Date();
+              await connection.execute(insert_login,[id_card, first_name, last_name,login_date])
+
+              res.writeHead(200, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ 
+                success: true, 
+                message: 'Member fetched successfully.', 
+                expiry: expiry,
+                first_name: first_name,
+                last_name:last_name,
+                login_date:login_date
+              }));
+              
+              await connection.end();
           } else {
-            res.writeHead(404, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ success: false, message: 'Member not found.' }));
+              res.writeHead(404, { 'Content-Type': 'application/json' });
+              res.end(JSON.stringify({ success: false, message: 'Member not found.' }));
           }
-        } catch (error) {
+      } catch (error) {
           console.error('Error fetching data:', error);
           res.writeHead(500, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ success: false, message: 'An error occurred while fetching the member.' }));
-        }
-      });
-      return
-    }
-  
+      }
+  });
+  return;
+}
 
 /// show  item on gym
   if (req.url === '/post/item') {
