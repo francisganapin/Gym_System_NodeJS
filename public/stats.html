@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Add Member</title>
+  <title>Gym Stats</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 
@@ -25,6 +25,7 @@
       font-size: 2rem;
       font-weight: 600;
       color: #4a5568;
+      text-align: center;
     }
 
     .header {
@@ -53,9 +54,51 @@
     tbody tr:nth-child(even) {
       background-color: #f7fafc;
     }
+
+    .trainer-list {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      margin-top: 20px;
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 8px;
+    }
+
+    .trainer {
+      background-color: #f7f7f7;
+      margin: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      width: 30%;
+      box-sizing: border-box;
+      border-radius: 8px;
+    }
+
+    .table-container {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+  max-height: 300px; /* Set the height you want */
+  overflow-y: auto; /* Enable vertical scrolling */
+}
+
+    /* Search input styling */
+    #search-input {
+      width: 100%;
+      padding: 0.75rem;
+      margin-bottom: 1rem;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
   </style>
 </head>
-
 <body>
 
   <!-- Navbar -->
@@ -64,7 +107,7 @@
   <!-- Member Count -->
   <div class="container">
     <div class="header">
-      <h1 id="member-count" class="text-center">Loading...</h1>
+      <h1 id="member-count">Loading...</h1>
     </div>
   </div>
 
@@ -84,6 +127,37 @@
       </table>
     </div>
   </div>
+
+
+  
+  <!-- Trainer List -->
+  <div class="container">
+    <input type="text" id="search-input" placeholder="Search members...">
+    <div class="table-container">
+      <div>
+      <h2>Members List Login</h2>
+      <table id="data-table">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Id Card</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Login</th>
+          </tr>
+        </thead>
+        <tbody id="data-body">
+          <!-- Data will be populated here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+  </div>
+
+</body>
+</html>
+
+
 
   <!-- Navbar Script -->
   <script>
@@ -148,3 +222,42 @@
 </body>
 
 </html>
+
+
+
+
+</div>
+
+<script>
+async function fetchLoginRecord(){
+  try{
+      const response = await fetch('record/member/login');
+      const result = await response.json();
+
+      if(result.success){
+          const rows = result.data.map(item => {
+            return`
+            <tr>
+              <td>${item.id || 'N/A'} </td>
+              <td>${item.id_card || 'N/A'}</td>
+             <td> ${item.first_name || 'N/A'}</td>
+             <td>  ${item.last_name || 'N/A'}</td>
+              <td> ${item.login || 'N/A'} </td>
+            </tr>`;  
+          }).join('');
+      // Insert the item information into the data-body tbody
+      document.getElementById('data-body').innerHTML = rows;
+    } else {
+      alert(result.message);
+      console.log(result);
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('An error occurred while fetching the item data.');
+  }
+}
+
+// Call fetchLoginRecord function to load the data when the page loads
+fetchLoginRecord();
+
+</script>

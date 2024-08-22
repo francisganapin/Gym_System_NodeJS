@@ -16,18 +16,21 @@ const mimeTypes = {
   '.svg': 'image/svg+xml',
 };
 
+const cofigConnectServer ={
+  host: 'localhost',
+  user: 'root',
+  password: 'root',
+  database: 'memberdb',
+}
+
+
 const server = createServer(async (req, res) => {
  
 
    // Show gym member available data in your gym member
   if (req.url === '/post/customers') {
      try {
-       const connection = await mysql.createConnection({
-         host: 'localhost',
-         user: 'root',
-         password: 'root',
-         database: 'memberdb',
-       });
+       const connection = await mysql.createConnection(cofigConnectServer); //connect to server
  
        const [rows] = await connection.query('SELECT * FROM gym_members');
        await connection.end();
@@ -55,13 +58,8 @@ const server = createServer(async (req, res) => {
        const { id, expiry, membership, firstName, lastName, phoneNumber, address } = JSON.parse(body);
  
        try {
-         const connection = await mysql.createConnection({
-           host: 'localhost',
-           user: 'root',
-           password: 'root',
-           database: 'memberdb',
-         });
- 
+        const connection = await mysql.createConnection(cofigConnectServer); //connect to server
+
          const sql = 'INSERT INTO gym_members (id_card, expiry, membership, first_name, last_name, phone_number, address) VALUES (?, ?, ?, ?, ?, ?, ?)';
          const values = [id, expiry, membership, firstName, lastName, phoneNumber, address];
  
@@ -90,12 +88,7 @@ const server = createServer(async (req, res) => {
        const { id, expiry, membership } = JSON.parse(body);
  
        try {
-         const connection = await mysql.createConnection({
-           host: 'localhost',
-           user: 'root',
-           password: 'root',
-           database: 'memberdb',
-         });
+       const connection = await mysql.createConnection(cofigConnectServer); //connect to server
  
          const sql = 'UPDATE gym_members SET Expiry = ?, Membership = ? WHERE ID_CARD = ?';
          const values = [expiry, membership, id];
@@ -126,12 +119,7 @@ const server = createServer(async (req, res) => {
       const { id_card } = JSON.parse(body);  // Assuming 'id' is the 'id_card' value
 
       try {
-          const connection = await mysql.createConnection({
-              host: 'localhost',
-              user: 'root',
-              password: 'root',
-              database: 'memberdb',
-          });
+        const connection = await mysql.createConnection(cofigConnectServer); //connect to server
 
           const sql = `SELECT expiry, first_name, last_name FROM gym_members WHERE id_card = ?`;
           const [rows] = await connection.execute(sql, [id_card]); 
@@ -143,7 +131,7 @@ const server = createServer(async (req, res) => {
               const { expiry, first_name, last_name } = rows[0];
 
               const insert_login ='INSERT login_record(id_card,first_name,last_name,login) VALUES (?,?,?,?)';
-              const login_date = new Date();
+              const login_date = `${new Date().toISOString().split('T')[0]} ${new Date().getHours()}:${new Date().getMinutes()}`;
               await connection.execute(insert_login,[id_card, first_name, last_name,login_date])
 
               res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -173,12 +161,7 @@ const server = createServer(async (req, res) => {
 /// show  item on gym
   if (req.url === '/post/item') {
     try {
-      const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'root',
-        database: 'memberdb',
-      });
+      const connection = await mysql.createConnection(cofigConnectServer); //connect to server
 
       const [rows] = await connection.query('SELECT * FROM gym_item');
       await connection.end();
@@ -205,12 +188,7 @@ const server = createServer(async (req, res) => {
       const {item_name,stock,description,supplier,phone_number} = JSON.parse(body);
 
       try {
-        const connection = await mysql.createConnection({
-          host: 'localhost',
-          user: 'root',
-          password: 'root',
-          database: 'memberdb',
-        });
+        const connection = await mysql.createConnection(cofigConnectServer); //connect to server
 
         const sql = 'INSERT INTO gym_item (item_name, stock, description, supplier, phone_number) VALUES  (?, ?, ?, ?, ?)';
         const values = [item_name,stock,description,supplier,phone_number];
@@ -241,12 +219,7 @@ const server = createServer(async (req, res) => {
       const { item_name, stock } = JSON.parse(body);
 
       try {
-        const connection = await mysql.createConnection({
-          host: 'localhost',
-          user: 'root',
-          password: 'root',
-          database: 'memberdb',
-        });
+       const connection = await mysql.createConnection(cofigConnectServer); //connect to server
 
         const sql = 'UPDATE gym_item SET stock = ? WHERE item_name = ?';
         const values = [stock, item_name];
@@ -276,12 +249,7 @@ const server = createServer(async (req, res) => {
       const { id } = JSON.parse(body);  // Use `id` instead of `item_name`
   
       try {
-        const connection = await mysql.createConnection({
-          host: 'localhost',
-          user: 'root',
-          password: 'root',
-          database: 'memberdb',
-        });
+        const connection = await mysql.createConnection(cofigConnectServer); //connect to server
   
         const sql = 'DELETE FROM gym_item WHERE id = ?';
         const values = [id];
@@ -305,12 +273,7 @@ const server = createServer(async (req, res) => {
     // Show all available data in your database
     if (req.url === '/select/trainor') {
       try {
-        const connection = await mysql.createConnection({
-          host: 'localhost',
-          user: 'root',
-          password: 'root',
-          database: 'memberdb',
-        });
+        const connection = await mysql.createConnection(cofigConnectServer); //connect to server
   
         const [rows] = await connection.query('SELECT * FROM gym_trainor');
         await connection.end();
@@ -373,12 +336,7 @@ const server = createServer(async (req, res) => {
         const { trainor_id} = JSON.parse(body);
   
         try {
-          const connection = await mysql.createConnection({
-            host: 'localhost',
-            user: 'root',
-            password: 'root',
-            database: 'memberdb',
-          });
+          const connection = await mysql.createConnection(cofigConnectServer); //connect to server
   
           const sql = 'DELETE FROM  gym_trainor  WHERE trainor_id = ?';
           const values = [trainor_id];
@@ -400,14 +358,9 @@ const server = createServer(async (req, res) => {
       // delete trainor database
     if (req.url === "/option/trainor/class" && req.method === 'GET') {
    
-          try {
-            const connection = await mysql.createConnection({
-              host: 'localhost',
-              user: 'root',
-              password: 'root',
-              database: 'memberdb',
-            });
-    
+      try {
+            const connection = await mysql.createConnection(cofigConnectServer); //connect to server
+
             const [rows] = await connection.execute('SELECT * FROM gym_trainor');
             await connection.end();
     
@@ -431,14 +384,7 @@ const server = createServer(async (req, res) => {
         const {trainor_id,first_name, last_name, specialty, phone_number} = JSON.parse(body);
   
         try {
-          const connection = await mysql.createConnection({
-            host: 'localhost',
-
-            
-            user: 'root',
-            password: 'root',
-            database: 'memberdb',
-          });
+          const connection = await mysql.createConnection(cofigConnectServer); //connect to server
   
           const sql = 'INSERT INTO gym_trainor (trainor_id,first_name, last_name, specialty, phone_number) VALUES  (?, ?, ?, ?, ?)';
           const values = [trainor_id,first_name, last_name, specialty, phone_number];
@@ -468,12 +414,7 @@ if (req.url === '/insert/class' && req.method === 'POST') {
     const { class_name, class_type, class_day, class_hour, trainor_name } = JSON.parse(body);
 
     try {
-      const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'root',
-        database: 'memberdb',
-      });
+      const connection = await mysql.createConnection(cofigConnectServer); //connect to server
 
       const sql = 'INSERT INTO gym_classes (class_name, class_type, class_day, class_hour, trainor_name) VALUES (?, ?, ?, ?, ?)';
       const values = [class_name, class_type, class_day, class_hour, trainor_name];
@@ -495,12 +436,7 @@ if (req.url === '/insert/class' && req.method === 'POST') {
     // show class on our gym
 if (req.url === '/post/gym_class') {
     try {
-      const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'root',
-        database: 'memberdb',
-      });
+      const connection = await mysql.createConnection(cofigConnectServer); //connect to server
 
       const [rows] = await connection.query('SELECT * FROM gym_classes');
       await connection.end();
@@ -517,12 +453,7 @@ if (req.url === '/post/gym_class') {
 
   if (req.url === '/count/gym/member') { // Corrected URL with leading slash
     try {
-      const connection = await mysql.createConnection({
-        host: 'localhost',
-        user: 'root',
-        password: 'root',
-        database: 'memberdb',
-      });
+      const connection = await mysql.createConnection(cofigConnectServer); //connect to server
 
       const [rows] = await connection.query('SELECT COUNT(*) AS total_members FROM gym_members');
       await connection.end();
@@ -542,13 +473,9 @@ if (req.url === '/post/gym_class') {
 // record list for gym login member
 if (req.url === '/record/member/login') {
   try {
-    const connection = await mysql.createConnection({
-      host: 'localhost',
-      user: 'root',
-      password: 'root',
-      database: 'memberdb',
-    });
-    const [rows] = await connection.query('SELECT * FROM login_record');
+    const connection = await mysql.createConnection(cofigConnectServer); //connect to server
+
+    const [rows] = await connection.query('SELECT * FROM login_record ORDER BY login DESC');
     await connection.end();
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -569,12 +496,7 @@ if (req.url === '/record/member/login') {
     // Show number  gym member available data in your gym member
     if (req.url === '/count/gym/member/membership') {
       try {
-        const connection = await mysql.createConnection({
-          host: 'localhost',
-          user: 'root',
-          password: 'root',
-          database: 'memberdb',
-        });
+       const connection = await mysql.createConnection(cofigConnectServer); //connect to server
   
         const [rows] = await connection.query('SELECT membership, COUNT(*) AS count FROM gym_members GROUP BY membership');
         await connection.end();
@@ -613,6 +535,7 @@ if (req.url === '/record/member/login') {
   }
     else if (req.url === '/gym_record_login') {
        filePath = join(process.cwd(), 'public/gym_record_login.html');
+       
   } else if(req.url ==='/login'){
       filePath = join(process.cwd(),'public/login.html')
   } else if(req.url ==='/gymclass'){
