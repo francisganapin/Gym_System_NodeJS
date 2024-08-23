@@ -336,39 +336,38 @@ function myFunction_trainor() {
 
 <!-- delete trainor-->
   <script>
-      
-    // Handle form submission
-     document.getElementById('delete-trainor-form').addEventListener('submit', async function(event) {
-      event.preventDefault();
-      const formData = new FormData(this);
-      const data = Object.fromEntries(formData.entries());
-  
-      try {
-        const response = await fetch('/delete/trainor', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        });
-  
-        const result = await response.json();
-        if (result.success) {
-          alert(result.message);
-          await fetchData(); // Refresh data after successful registration
+      // Handle form submission for deleting a trainor
+  document.getElementById('delete-trainor-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+    
+    const formData = new FormData(this);
+    const data = Object.fromEntries(formData.entries());
 
-          alert('Sucessful deleted trainor')
-        } else {
-          alert(result.message);
-          await fetchData(); // Refresh data after successful registration
-        
-        }
-      } catch (error) {
-        console.error('Error:', error);
-        alert('An error occurred while inserting item.');
-        await fetchData(); // Refresh data after successful registration
+    try {
+      const response = await fetch('/delete/trainor', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        alert(result.message);  // Notify the user of success
+      } else {
+        console.error('Error:', result.message || 'An unexpected error occurred.');
+        alert(result.message || 'An error occurred while deleting the trainor.');
       }
-    });
+      
+      await fetchData();  // Fetch and update the data after operation
+    } catch (error) {
+      console.error('Error:', error);
+      location.reload();
+    }
+  });
+
     
   </script>
 

@@ -331,47 +331,39 @@ const server = createServer(async (req, res) => {
       req.on('data', chunk => {
         body += chunk.toString();
       });
-  
+    
       req.on('end', async () => {
-        const { trainor_id} = JSON.parse(body);
-  
+        const { trainor_id } = JSON.parse(body);
+    
         try {
-          const connection = await mysql.createConnection(cofigConnectServer); //connect to server
-  
-          const sql = 'DELETE FROM  gym_trainor  WHERE trainor_id = ?';
+          const connection = await mysql.createConnection(cofigConnectServer); // Connect to server
+    
+          const sql = 'DELETE FROM gym_trainor WHERE trainor_id = ?';
           const values = [trainor_id];
     
-          await connection.query(sql, values);
-          await connection.end();
+          const [result] = await connection.query(sql, values);  // Execute the DELETE query
+          await connection.end();  // Close the database connection
     
-          res.writeHead(200, { 'Content-Type': 'application/json' });
-          res.end(JSON.stringify({ success: true, message: 'trainor was delete  successfully.' }));
+          if (result.affectedRows === 0) {
+            // No rows were affected, meaning the trainor_id does not exist
+            res.writeHead(404, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: false, message: 'Trainor not found. No record deleted.' }));
+          } else {
+            // Successfully deleted the record
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ success: true, message: 'Trainor was deleted successfully.' }));
+          }
         } catch (error) {
-          console.error('Error updating data:', error);
+          console.error('Error deleting data:', error);
           res.writeHead(500, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ success: false, message: 'An error occurred while deleting the trainor.' }));
         }
       });
       return;
     }
-
-      // delete trainor database
-    if (req.url === "/option/trainor/class" && req.method === 'GET') {
-   
-      try {
-            const connection = await mysql.createConnection(cofigConnectServer); //connect to server
-
-            const [rows] = await connection.execute('SELECT * FROM gym_trainor');
-            await connection.end();
     
-            res.writeHead(200, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify(rows));
-          } catch (error) {
-            
-          }
-        
-        return;
-      }
+
+
   
     // Insert new trainor into the database
     if (req.url === '/insert/trainor' && req.method === 'POST') {
@@ -488,10 +480,6 @@ if (req.url === '/record/member/login') {
   }
   return;
 }
-
-
-
-
   
     // Show number  gym member available data in your gym member
     if (req.url === '/count/gym/member/membership') {

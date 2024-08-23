@@ -12,14 +12,15 @@
 
 
 <style>
-  .container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      padding: 16px;
-      max-width: 1200px;
-      margin: auto;
-  }
+   .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #f7f7f7;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
 
   .table-container {
       background-color: white;
@@ -184,9 +185,8 @@
 <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names...">
 
 <div class="trainer-list">
-  <div class="table-container">
-      <h2>Members List</h2>
-        <!-- Search input outside of table -->
+
+
         
           <table id="data-table">
             <thead>
@@ -203,8 +203,10 @@
                 <!-- Data will be populated here -->
             </tbody>
     </table>
+
 </div>
-</div>
+
+
 
 <!-- Forms Row -->
 <div class="forms-row">
