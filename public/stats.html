@@ -136,6 +136,15 @@
   color: #666;
   margin: 15px 0;
 }
+
+.font_size{
+  font-size: 30px;
+  text-align: center;
+
+}
+.input_size{
+  border-radius: 100px;
+}
   </style>
 </head>
 
@@ -170,29 +179,37 @@
     </div>
   </div>
 
-  <!-- Trainer List -->
-  <section class="container cd-table-container">
-    <div class="container">
-      <input type="text" id="myInput_trainor" onkeyup="myFunction()" placeholder="Login Card Trainor">
-      <h2>Members List Login</h2>
-      <div class="table-container">
-        <table id="data-table">
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Id Card</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Login</th>
-            </tr>
-          </thead>
-          <tbody id="data-body">
-            <!-- Data will be populated here -->
-          </tbody>
-        </table>
-      </div>
+<!-- Trainer List -->
+<section class="container cd-table-container">
+  <div class="container">
+    <!-- Search input for filtering the table based on "Id Card" -->
+    <div class="form-group">
+      <input type="text" id="myInput_trainor" onkeyup="myFunction()" placeholder="Login Card Trainor" class="w-full max-w-sm p-4 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md">
     </div>
-  </section>
+    
+    
+    <div class="font_size"><h2>Members List Login</h2></div>
+    
+    <!-- Table container for styling -->
+    <div class="table-container">
+      <!-- Table for displaying member information -->
+      <table id="data-table">
+        <thead>
+          <tr>
+            <th>Id</th>
+            <th>Id Card</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Login</th>
+          </tr>
+        </thead>
+        <tbody id="data-body">
+       
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
 
   <!-- Navbar Script -->
   <script>
@@ -287,29 +304,29 @@
     fetchLoginRecord();
   </script>
 
-  <!-- Search Filter Script -->
+<!--- filter the login member -->
   <script>
-    function myFunction() {
-      var input, filter, table, rows, i, txtValue;
-      input = document.getElementById('myInput_trainor');
-      filter = input.value.toUpperCase();
-      table = document.getElementById('data-table');
-      rows = table.getElementsByTagName('tr');
 
-      for (i = 1; i < rows.length; i++) { // Start from 1 to skip the header row
-        let idCard = rows[i].getElementsByTagName('td')[1]; // Assuming 'Id Card' is in the 2nd column
-        
-        if (idCard) {
-          let idCardValue = idCard.textContent || idCard.innerText;
-          txtValue = idCardValue.toUpperCase();
-          if (txtValue.indexOf(filter) > -1) {
-            rows[i].style.display = "";
-          } else {
-            rows[i].style.display = 'none';
-          }
-        }
+    function myFunction() {
+  var input, filter, table, rows, i, txtValue;
+  input = document.getElementById('myInput_trainor');
+  filter = input.value.toUpperCase();
+  table = document.getElementById('data-table');
+  rows = table.getElementsByTagName('tr');
+  for (i = 1; i < rows.length; i++) { 
+    let idCard = rows[i].getElementsByTagName('td')[1];
+    if (idCard) {
+      let idCardValue = idCard.textContent || idCard.innerText;
+      txtValue = idCardValue.toUpperCase();
+      if (txtValue.indexOf(filter) > -1) {
+        rows[i].style.display = "";
+      } else {
+        rows[i].style.display = 'none';
       }
     }
+  }
+}
+
   </script>
 
 </body>
