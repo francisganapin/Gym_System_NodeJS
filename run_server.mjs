@@ -127,14 +127,14 @@ const server = createServer(async (req, res) => {
       try {
         const connection = await mysql.createConnection(cofigConnectServer); //connect to server
 
-          const sql = `SELECT expiry, first_name, last_name FROM gym_members WHERE id_card = ?`;
+          const sql = `SELECT expiry, first_name, last_name, profile_image FROM gym_members WHERE id_card = ?`;
           const [rows] = await connection.execute(sql, [id_card]); 
 
 
 
           if (rows.length > 0) {
             
-              const { expiry, first_name, last_name } = rows[0];
+              const { expiry, first_name, last_name,profile_image } = rows[0];
 
               const insert_login ='INSERT login_record(id_card,first_name,last_name,login) VALUES (?,?,?,?)';
               const login_date = `${new Date().toISOString().split('T')[0]} ${new Date().getHours()}:${new Date().getMinutes()}`;
@@ -147,7 +147,8 @@ const server = createServer(async (req, res) => {
                 expiry: expiry,
                 first_name: first_name,
                 last_name:last_name,
-                login_date:login_date
+                login_date:login_date,
+                profile_image:profile_image
               }));
 
               await connection.end();

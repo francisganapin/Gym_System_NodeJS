@@ -51,6 +51,12 @@
             </div>
           </form>
           <h1 id="expiry-date"></h1>
+          <h1 id="first_name"></h1>
+          <h1 id="last_name"></h1>
+       
+          
+          <img id="profile-image2" src="" class="h-12 w-12 rounded-full object-cover">
+        </div>
         </div>
       </div>
     </div>
@@ -99,13 +105,14 @@
         alert(result.message, data);
         // You can update the UI or redirect the user as needed
         document.getElementById('expiry-date').textContent = `Expiry Date: ${result.expiry}`;
+        document.getElementById('first_name').textContent = `First Name: ${result.first_name}`;
+        document.getElementById('last_name').textContent = `Last Name: ${result.last_name}`;
+        document.getElementById('profile-image2').src = `${result.profile_image}`;
       } else {
         alert(result.message);
-        document.getElementById('expiry-date').textContent = 'Failed to log in the member';
+        document.getElementById('expiry-date').textContent = 'Member does not exist';
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred while logging in the member.');
     }
   });
   

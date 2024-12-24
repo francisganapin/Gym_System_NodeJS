@@ -1,6 +1,7 @@
 December 24 2024
 	-We also have picture for each member 
 	-You can update the member image via Python and Sql
+	-login user we can see expiration,name and image
 
 December 23 2024 
 	-updated gym image to homepage
