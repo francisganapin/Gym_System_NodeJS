@@ -2,6 +2,7 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { join, extname } from 'node:path';
 
+
 import mysql from 'mysql2/promise';
 
 
@@ -22,6 +23,12 @@ const cofigConnectServer ={
   password: 'root',
   database: 'memberdb',
 }
+
+
+
+
+
+
 
 
 const server = createServer(async (req, res) => {
@@ -55,13 +62,15 @@ const server = createServer(async (req, res) => {
      });
  
      req.on('end', async () => {
-       const { id, expiry, membership, firstName, lastName, phoneNumber, address } = JSON.parse(body);
+       const { id, expiry, membership, firstName, lastName, phoneNumber, address} = JSON.parse(body); 
  
        try {
+
+        const profile_image = 'public/images/noface.png'
         const connection = await mysql.createConnection(cofigConnectServer); //connect to server
 
-         const sql = 'INSERT INTO gym_members (id_card, expiry, membership, first_name, last_name, phone_number, address) VALUES (?, ?, ?, ?, ?, ?, ?)';
-         const values = [id, expiry, membership, firstName, lastName, phoneNumber, address];
+         const sql = 'INSERT INTO gym_members (id_card, expiry, membership, first_name, last_name, phone_number, address, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?,?)';
+         const values = [id, expiry, membership, firstName, lastName, phoneNumber, address, profile_image];
  
          await connection.query(sql, values);
          await connection.end();
@@ -528,6 +537,7 @@ if (req.url === '/record/member/login') {
       filePath = join(process.cwd(),'public/login.html')
   } else if(req.url ==='/gymclass'){
     filePath = join(process.cwd(),'public/class.html')
+    
 }
     else {
     // For other requests, try to serve static files
@@ -546,6 +556,9 @@ if (req.url === '/record/member/login') {
     res.end('File not found');
   }
 });
+
+
+
 
 server.listen(3000, '127.0.0.1', () => {
   console.log('Listening on \x1b[34mhttp://127.0.0.1:3000/homepage\x1b[0m');

@@ -183,6 +183,7 @@ body {
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Phone Number</th>
+                <th>Profile</th>
             </tr>
         </thead>
      
@@ -250,9 +251,19 @@ body {
                     <i class="fas fa-city"></i>
                 </div>
             </div>
-            <div>
+
+            <div class="form-group">
+              <div>
                 <input type="submit" value="Submit" class="btn">
             </div>
+              </div>
+          </div>
+
+
+
+
+            
+           
         </form>
     </div>
 
@@ -300,7 +311,15 @@ body {
 
 
 
+<script>
+var file = document.getElementById("upload");
 
+file.addEventListener("change", function() {
+    for (var i = 0; i < file.files.length; i++) {
+        console.log(file.files[i].name);
+    }
+}, false);
+</script>
 
 
 
@@ -369,6 +388,9 @@ body {
               <td class="px-5 py-4 whitespace-nowrap">${item.first_name || 'N/A'}</td>
               <td class="px-5 py-4 whitespace-nowrap">${item.last_name || 'N/A'}</td>
               <td class="px-5 py-4 whitespace-nowrap">${item.phone_number || 'N/A'}</td>
+        <td class="px-5 py-4 whitespace-nowrap">
+      <img src="${item.profile_image}" alt="Profile Image" class="h-12 w-12 rounded-full object-cover">
+      </td>
             </tr>
           `;
         }).join('');
