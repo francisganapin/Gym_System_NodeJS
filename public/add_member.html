@@ -175,7 +175,7 @@ body {
     <input type="text" id="myInput" onkeyup="myFunction()" placeholder="Search for names...">
     <table >
         <thead>
-            <tr>
+         
                 <th>ID</th>
                 <th>ID Card</th>
                 <th>Expiry</th>
@@ -184,7 +184,7 @@ body {
                 <th>Last Name</th>
                 <th>Phone Number</th>
                 <th>Profile</th>
-            </tr>
+        
         </thead>
      
 </table>
@@ -192,7 +192,7 @@ body {
 <div class="scrollable-table-container">
   <table id="data-table">
         <tbody id="data-body">
-            <!-- Data will be populated here -->
+            
         </tbody>
 
     </table>
@@ -253,6 +253,13 @@ body {
             </div>
 
             <div class="form-group">
+              <input type="file" name="profile_image" placeholder="Profile" required>
+              <div class="icon">
+                  <i class="fas fa-image"></i>
+              </div>
+          </div>
+
+            <div class="form-group">
               <div>
                 <input type="submit" value="Submit" class="btn">
             </div>
@@ -311,15 +318,6 @@ body {
 
 
 
-<script>
-var file = document.getElementById("upload");
-
-file.addEventListener("change", function() {
-    for (var i = 0; i < file.files.length; i++) {
-        console.log(file.files[i].name);
-    }
-}, false);
-</script>
 
 
 

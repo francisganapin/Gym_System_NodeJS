@@ -1,8 +1,6 @@
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { join, extname } from 'node:path';
-
-
 import mysql from 'mysql2/promise';
 
 
@@ -54,37 +52,36 @@ const server = createServer(async (req, res) => {
    }
 
 
-   //register member
- if (req.url === '/register/gym_member' && req.method === 'POST') {
-     let body = '';
-     req.on('data', chunk => {
-       body += chunk.toString();
-     });
- 
-     req.on('end', async () => {
-       const { id, expiry, membership, firstName, lastName, phoneNumber, address} = JSON.parse(body); 
- 
-       try {
+   if (req.url === '/register/gym_member' && req.method === 'POST') {
+    let body = '';
+    req.on('data', chunk => {
+      body += chunk.toString();
+    });
 
-        const profile_image = 'public/images/noface.png'
-        const connection = await mysql.createConnection(cofigConnectServer); //connect to server
+    req.on('end', async () => {
+      const { id, expiry, membership, firstName, lastName, phoneNumber, address} = JSON.parse(body); 
 
-         const sql = 'INSERT INTO gym_members (id_card, expiry, membership, first_name, last_name, phone_number, address, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?,?)';
-         const values = [id, expiry, membership, firstName, lastName, phoneNumber, address, profile_image];
- 
-         await connection.query(sql, values);
-         await connection.end();
- 
-         res.writeHead(200, { 'Content-Type': 'application/json' });
-         res.end(JSON.stringify({ success: true, message: 'Member registered successfully.' }));
-       } catch (error) {
-         console.error('Error inserting data:', error);
-         res.writeHead(500, { 'Content-Type': 'application/json' });
-         res.end(JSON.stringify({ success: false, message: 'An error occurred while registering the member.' }));
-       }
-     });
-     return; // Indicate that the request was handled
- }
+      try {
+
+       const profile_image = 'public/images/noface.png'
+       const connection = await mysql.createConnection(cofigConnectServer); //connect to server
+
+        const sql = 'INSERT INTO gym_members (id_card, expiry, membership, first_name, last_name, phone_number, address, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?,?)';
+        const values = [id, expiry, membership, firstName, lastName, phoneNumber, address, profile_image];
+
+        await connection.query(sql, values);
+        await connection.end();
+
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: true, message: 'Member registered successfully.' }));
+      } catch (error) {
+        console.error('Error inserting data:', error);
+        res.writeHead(500, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({ success: false, message: 'An error occurred while registering the member.' }));
+      }
+    });
+    return; // Indicate that the request was handled
+}
  
    // update member
    if (req.url === "/update/gym_member" && req.method === 'POST') {
