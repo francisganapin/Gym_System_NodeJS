@@ -10,8 +10,7 @@ I made this application time by time since i need to showcase some of my project
 
 To set up your environment, ensure you have the following installed:
 
-- **🐍 Python 3.11**
-- **🌐 Django 4.2**
+
 - **🌐 Node.js v20.16.0**
 - **🛢  mySQL v8.0.39**
   ```bash
