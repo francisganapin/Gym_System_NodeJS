@@ -4,7 +4,7 @@ I made this application time by time since i need to showcase some of my project
 
 # 📋 Project Requirements
 
-**🔄 Last Updated:** 04/19/2024
+**🔄 Last Updated:** 12/24/2024
 
 ## ⚙️ Environment Setup
 
@@ -27,7 +27,8 @@ To set up your environment, ensure you have the following installed:
 
 
 
-### 2. Example Member list its Fake Phone Number Dont Worry And Name ** ![Screenshot 2024-08-19 164131](https://github.com/user-attachments/assets/c2a64cfb-481e-487a-81b6-c9f55836171f)**
+### 2. Example Member list its Fake Phone Number Dont Worry And Name ** ![Register page](https://github.com/user-attachments/assets/8f9aa465-075f-4db6-a455-64a13170af46)
+**
 
 ## 🛠 Useful Commands:
 ```bash
