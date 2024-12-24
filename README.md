@@ -30,11 +30,10 @@ To set up your environment, ensure you have the following installed:
 
 
 <<<<<<< HEAD
-### 2. Example Member list its Fake Phone Number Dont Worry And Name ** !![alt text](<Register page.jpg>)**
+
 =======
 ### 2. Example Member list its Fake Phone Number Dont Worry And Name ** ![Register page](https://github.com/user-attachments/assets/8f9aa465-075f-4db6-a455-64a13170af46)
 **
->>>>>>> 172ede72818cfd834db4f9e2acc81fb6cbd5fce2
 
 ## 🛠 Useful Commands:
 ```bash
