@@ -15,18 +15,17 @@ const mimeTypes = {
   '.svg': 'image/svg+xml',
 };
 
-const cofigConnectServer ={
-  host: 'localhost',
-  user: 'root',
-  password: 'root',
-  database: 'memberdb',
-}
 
 
-
-
-
-
+const pool = mysql.createPool({
+  host:'localhost',
+  user:'root',
+  password:'root',
+  database:'memberdb',
+  waitForConnections:true,
+  connectionLimit:10,
+  queueLimit:0
+});
 
 
 const server = createServer(async (req, res) => {
@@ -35,10 +34,9 @@ const server = createServer(async (req, res) => {
    // Show gym member available data in your gym member
   if (req.url === '/post/customers') {
      try {
-       const connection = await mysql.createConnection(cofigConnectServer); //connect to server
+       
  
-       const [rows] = await connection.query('SELECT * FROM gym_members');
-       await connection.end();
+       const [rows] = await pool.query('SELECT * FROM gym_members');
  
        res.writeHead(200, { 'Content-Type': 'application/json' });
        res.end(JSON.stringify({ success: true, data: rows }));
@@ -52,7 +50,7 @@ const server = createServer(async (req, res) => {
    }
 
 
-   if (req.url === '/register/gym_member' && req.method === 'POST') {
+   if (req.url === '/register/gym_member' && req.method === 'POST' ) {
     let body = '';
     req.on('data', chunk => {
       body += chunk.toString();
@@ -63,14 +61,12 @@ const server = createServer(async (req, res) => {
 
       try {
 
-       const profile_image = 'public/images/noface.png'
-       const connection = await mysql.createConnection(cofigConnectServer); //connect to server
+        const profile_image = 'public/images/noface.png'
 
-        const sql = 'INSERT INTO gym_members (id_card, expiry, membership, first_name, last_name, phone_number, address, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?,?)';
-        const values = [id, expiry, membership, firstName, lastName, phoneNumber, address, profile_image];
+        const sql = 'INSERT INTO gym_members (id_card, expiry, membership, first_name, last_name, phone_number, address, profile_image) VALUES (?, ?, ?, ?, ?, ?, ?)';
+        const values = [id, expiry, membership, firstName, lastName, phoneNumber, address];
 
-        await connection.query(sql, values);
-        await connection.end();
+        await pool.query(sql, values);
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: true, message: 'Member registered successfully.' }));
@@ -94,13 +90,12 @@ const server = createServer(async (req, res) => {
        const { id, expiry, membership } = JSON.parse(body);
  
        try {
-       const connection = await mysql.createConnection(cofigConnectServer); //connect to server
- 
+  
          const sql = 'UPDATE gym_members SET Expiry = ?, Membership = ? WHERE ID_CARD = ?';
          const values = [expiry, membership, id];
  
-         await connection.query(sql, values);
-         await connection.end();
+         await pool.query(sql, values);
+    
  
          res.writeHead(200, { 'Content-Type': 'application/json' });
          res.end(JSON.stringify({ success: true, message: 'Member updated successfully.' }));
@@ -125,10 +120,10 @@ const server = createServer(async (req, res) => {
       const { id_card } = JSON.parse(body);  // Assuming 'id' is the 'id_card' value
 
       try {
-        const connection = await mysql.createConnection(cofigConnectServer); //connect to server
+       
 
           const sql = `SELECT expiry, first_name, last_name, profile_image FROM gym_members WHERE id_card = ?`;
-          const [rows] = await connection.execute(sql, [id_card]); 
+          const [rows] = await pool.execute(sql, [id_card]); 
 
 
 
@@ -138,7 +133,7 @@ const server = createServer(async (req, res) => {
 
               const insert_login ='INSERT login_record(id_card,first_name,last_name,login) VALUES (?,?,?,?)';
               const login_date = `${new Date().toISOString().split('T')[0]} ${new Date().getHours()}:${new Date().getMinutes()}`;
-              await connection.execute(insert_login,[id_card, first_name, last_name,login_date])
+              await pool.execute(insert_login,[id_card, first_name, last_name,login_date])
 
               res.writeHead(200, { 'Content-Type': 'application/json' });
               res.end(JSON.stringify({ 
@@ -151,7 +146,6 @@ const server = createServer(async (req, res) => {
                 profile_image:profile_image
               }));
 
-              await connection.end();
           } else {
               res.writeHead(404, { 'Content-Type': 'application/json' });
               res.end(JSON.stringify({ success: false, message: 'Member not found.' }));
@@ -168,10 +162,10 @@ const server = createServer(async (req, res) => {
 /// show  item on gym
   if (req.url === '/post/item') {
     try {
-      const connection = await mysql.createConnection(cofigConnectServer); //connect to server
+     
 
-      const [rows] = await connection.query('SELECT * FROM gym_item');
-      await connection.end();
+      const [rows] = await pool.query('SELECT * FROM gym_item');
+
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ success: true, data: rows }));
@@ -195,13 +189,12 @@ const server = createServer(async (req, res) => {
       const {item_name,stock,description,supplier,phone_number} = JSON.parse(body);
 
       try {
-        const connection = await mysql.createConnection(cofigConnectServer); //connect to server
-
+     
         const sql = 'INSERT INTO gym_item (item_name, stock, description, supplier, phone_number) VALUES  (?, ?, ?, ?, ?)';
         const values = [item_name,stock,description,supplier,phone_number];
 
-        await connection.query(sql, values);
-        await connection.end();
+        await pool.query(sql, values);
+ 
 
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: true, message: 'item was sucessfully inserted' }));
@@ -226,13 +219,13 @@ const server = createServer(async (req, res) => {
       const { item_name, stock } = JSON.parse(body);
 
       try {
-       const connection = await mysql.createConnection(cofigConnectServer); //connect to server
+
 
         const sql = 'UPDATE gym_item SET stock = ? WHERE item_name = ?';
         const values = [stock, item_name];
   
-        await connection.query(sql, values);
-        await connection.end();
+        await pool.query(sql, values);
+     
   
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: true, message: 'item stock updated successfully.' }));
@@ -256,13 +249,12 @@ const server = createServer(async (req, res) => {
       const { id } = JSON.parse(body);  // Use `id` instead of `item_name`
   
       try {
-        const connection = await mysql.createConnection(cofigConnectServer); //connect to server
-  
+        
         const sql = 'DELETE FROM gym_item WHERE id = ?';
         const values = [id];
     
-        await connection.query(sql, values);
-        await connection.end();
+        await pool.query(sql, values);
+     
     
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: true, message: 'Item was deleted successfully.' }));
@@ -280,10 +272,9 @@ const server = createServer(async (req, res) => {
     // Show all available data in your database
     if (req.url === '/select/trainor') {
       try {
-        const connection = await mysql.createConnection(cofigConnectServer); //connect to server
-  
-        const [rows] = await connection.query('SELECT * FROM gym_trainor');
-        await connection.end();
+       
+        const [rows] = await pool.query('SELECT * FROM gym_trainor');
+       
   
         res.writeHead(200, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ success: true, data: rows }));
@@ -306,20 +297,12 @@ const server = createServer(async (req, res) => {
         const {trainor_id,first_name, last_name, specialty, phone_number} = JSON.parse(body);
   
         try {
-          const connection = await mysql.createConnection({
-            host: 'localhost',
-
-            
-            user: 'root',
-            password: 'root',
-            database: 'memberdb',
-          });
-  
+       
           const sql = 'INSERT INTO gym_trainor (trainor_id,first_name, last_name, specialty, phone_number) VALUES  (?, ?, ?, ?, ?)';
           const values = [trainor_id,first_name, last_name, specialty, phone_number];
   
-          await connection.query(sql, values);
-          await connection.end();
+          await pool.query(sql, values);
+  
   
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ success: true, message: 'item was sucessfully inserted' }));
@@ -343,13 +326,13 @@ const server = createServer(async (req, res) => {
         const { trainor_id } = JSON.parse(body);
     
         try {
-          const connection = await mysql.createConnection(cofigConnectServer); // Connect to server
+        
     
           const sql = 'DELETE FROM gym_trainor WHERE trainor_id = ?';
           const values = [trainor_id];
     
-          const [result] = await connection.query(sql, values);  // Execute the DELETE query
-          await connection.end();  // Close the database connection
+          const [result] = await pool.query(sql, values);  // Execute the DELETE query
+      
     
           if (result.affectedRows === 0) {
             // No rows were affected, meaning the trainor_id does not exist
@@ -383,14 +366,11 @@ const server = createServer(async (req, res) => {
         const {trainor_id,first_name, last_name, specialty, phone_number} = JSON.parse(body);
   
         try {
-          const connection = await mysql.createConnection(cofigConnectServer); //connect to server
-  
           const sql = 'INSERT INTO gym_trainor (trainor_id,first_name, last_name, specialty, phone_number) VALUES  (?, ?, ?, ?, ?)';
           const values = [trainor_id,first_name, last_name, specialty, phone_number];
   
-          await connection.query(sql, values);
-          await connection.end();
-  
+          await pool.query(sql, values);
+        
           res.writeHead(200, { 'Content-Type': 'application/json' });
           res.end(JSON.stringify({ success: true, message: 'item was sucessfully inserted trainor' }));
         } catch (error) {
@@ -413,13 +393,11 @@ if (req.url === '/insert/class' && req.method === 'POST') {
     const { class_name, class_type, class_day, class_hour, trainor_name } = JSON.parse(body);
 
     try {
-      const connection = await mysql.createConnection(cofigConnectServer); //connect to server
 
       const sql = 'INSERT INTO gym_classes (class_name, class_type, class_day, class_hour, trainor_name) VALUES (?, ?, ?, ?, ?)';
       const values = [class_name, class_type, class_day, class_hour, trainor_name];
 
-      await connection.query(sql, values);
-      await connection.end();
+      await pool.query(sql, values);
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ success: true, message: 'Class was successfully inserted.' }));
@@ -435,10 +413,8 @@ if (req.url === '/insert/class' && req.method === 'POST') {
     // show class on our gym
 if (req.url === '/post/gym_class') {
     try {
-      const connection = await mysql.createConnection(cofigConnectServer); //connect to server
+      const [rows] = await pool.query('SELECT * FROM gym_classes');
 
-      const [rows] = await connection.query('SELECT * FROM gym_classes');
-      await connection.end();
 
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ success: true, data: rows }));
@@ -452,11 +428,7 @@ if (req.url === '/post/gym_class') {
 
   if (req.url === '/count/gym/member') { // Corrected URL with leading slash
     try {
-      const connection = await mysql.createConnection(cofigConnectServer); //connect to server
-
-      const [rows] = await connection.query('SELECT COUNT(*) AS total_members FROM gym_members');
-      await connection.end();
-
+      const [rows] = await pool.query('SELECT COUNT(*) AS total_members FROM gym_members');
       console.log(rows);  // Add this to see what the server is sending
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ success: true, data: rows}));
@@ -472,10 +444,8 @@ if (req.url === '/post/gym_class') {
 // record list for gym login member
 if (req.url === '/record/member/login') {
   try {
-    const connection = await mysql.createConnection(cofigConnectServer); //connect to server
-
-    const [rows] = await connection.query('SELECT * FROM login_record ORDER BY login DESC');
-    await connection.end();
+   
+    const [rows] = await pool.query('SELECT * FROM login_record ORDER BY login DESC');
 
     res.writeHead(200, { 'Content-Type': 'application/json' });
     res.end(JSON.stringify({ success: true, data: rows }));
@@ -491,10 +461,9 @@ if (req.url === '/record/member/login') {
     // Show number  gym member available data in your gym member
     if (req.url === '/count/gym/member/membership') {
       try {
-       const connection = await mysql.createConnection(cofigConnectServer); //connect to server
-  
-        const [rows] = await connection.query('SELECT membership, COUNT(*) AS count FROM gym_members GROUP BY membership');
-        await connection.end();
+       
+        const [rows] = await pool.query('SELECT membership, COUNT(*) AS count FROM gym_members GROUP BY membership');
+    
 
         
         console.log(rows)
