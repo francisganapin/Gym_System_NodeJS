@@ -1,3 +1,6 @@
+9/21/2025
+	updated the code using pool instead of create
+
 December 24 2024
 	-We also have picture for each member 
 	-You can update the member image via Python and Sql

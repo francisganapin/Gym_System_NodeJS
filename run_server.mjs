@@ -32,15 +32,38 @@ const server = createServer(async (req, res) => {
  
 
    // Show gym member available data in your gym member
-  if (req.url === '/post/customers') {
+  if (req.url.startsWith('/api/customers')) {
      try {
        
+      const url = new URL(req.url, `http://${req.headers.host}`);
+      const page = parseInt(url.searchParams.get('page')) || 1;
+      const limit = parseInt(url.searchParams.get('limit')) || 10;
+      const offset = (page -1) * limit;
  
-       const [rows] = await pool.query('SELECT * FROM gym_members');
- 
-       res.writeHead(200, { 'Content-Type': 'application/json' });
-       res.end(JSON.stringify({ success: true, data: rows }));
-       console.log(rows)
+
+      const [rows] = await pool.query(
+        'SELECT * FROM gym_members LIMIT ? OFFSET ?',
+        [limit,offset]
+      );
+
+
+        // Fixed: Correct destructuring for COUNT query
+      const [countResult] = await pool.query('SELECT COUNT(*) as total FROM gym_members');
+      const total = countResult[0].total;
+
+      const totalPages = Math.ceil(total / limit);
+
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ 
+        success: true, 
+        data: rows,
+        totalPages,
+        totalItems:total,
+        perPage:limit,
+        data:rows,
+      }));
+      console.log(`Fetched page ${page} (${rows.length} members)`);
+
      } catch (error) {
        console.error('Error connecting to the database:', error);
        res.writeHead(500, { 'Content-Type': 'application/json' });
@@ -160,7 +183,7 @@ const server = createServer(async (req, res) => {
 }
 
 /// show  item on gym
-  if (req.url === '/post/item') {
+  if (req.url === '/api/item') {
     try {
      
 
@@ -270,7 +293,7 @@ const server = createServer(async (req, res) => {
   
 
     // Show all available data in your database
-    if (req.url === '/select/trainor') {
+    if (req.url === '/api/trainor') {
       try {
        
         const [rows] = await pool.query('SELECT * FROM gym_trainor');
@@ -411,7 +434,7 @@ if (req.url === '/insert/class' && req.method === 'POST') {
 }
 
     // show class on our gym
-if (req.url === '/post/gym_class') {
+if (req.url === '/api/gym_class') {
     try {
       const [rows] = await pool.query('SELECT * FROM gym_classes');
 
@@ -442,7 +465,7 @@ if (req.url === '/post/gym_class') {
 
 
 // record list for gym login member
-if (req.url === '/record/member/login') {
+if (req.url === '/api/member/login') {
   try {
    
     const [rows] = await pool.query('SELECT * FROM login_record ORDER BY login DESC');
